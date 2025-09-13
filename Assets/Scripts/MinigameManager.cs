@@ -9,7 +9,6 @@ public class MinigameManager : IMinigameManager
     private readonly IResourceLoader ResourceLoader;
     private readonly MinigameLoadingCurtainPresenter LoadingCurtainPresenter;
 
-    private Minigames CurrentMinigame;
     private MinigameInputData CurrentInputData;
     private bool IsMinigameLoaded = false;
     private IMinigameModel MinigameModel;
@@ -25,26 +24,34 @@ public class MinigameManager : IMinigameManager
 
     public async UniTaskVoid LoadMinigame(Minigames minigame, MinigameInputData input)
     {
+        /*
         LoadingCurtainPresenter.Enable();
         
-        CurrentMinigame = minigame;
         CurrentInputData = input;
         
         var result = await ResourceLoader.LoadMinigameScene(minigame, LoadingCurtainPresenter);
         
         if (result.Status == ResourceLoadStatus.Success)
         {
-            // Find IMinigameModel implementation in the loaded scene
-            MinigameModel = FindMinigameModelInScene(result.SuccessData);
+            // Load the scene asynchronously
+            var scene = ResourceLoaderHelper.GetMinigameSceneName(minigame);
+            var loadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             
-            if (MinigameModel != null)
+            await loadOperation;
+            
+            // Find IMinigameModel implementation in the loaded scene
+            var loadedScene = SceneManager.GetSceneByName(sceneName);
+            MinigameModel = FindMinigameModelInScene(loadedScene);
+            
+            if (MinigameModel == null)
             {
-                IsMinigameLoaded = true;
-                MinigameModel.Init(CurrentInputData);
+                Debug.LogError($"No IMinigameModel implementation found in scene: {minigame}");
             }
             else
             {
-                Debug.LogError($"No IMinigameModel implementation found in scene: {minigame}");
+                IsMinigameLoaded = true;
+                SubscribeToMinigameEvents();
+                MinigameModel.Init(CurrentInputData);
             }
         }
         else
@@ -52,6 +59,7 @@ public class MinigameManager : IMinigameManager
             Debug.LogError($"Failed to load minigame scene: {minigame}");
         }
         LoadingCurtainPresenter.Disable();
+        */
     }
 
     public async UniTaskVoid StartMinigame()
@@ -76,10 +84,10 @@ public class MinigameManager : IMinigameManager
     {
         if (IsMinigameLoaded)
         {
+            UnsubscribeFromMinigameEvents();
             MinigameModel.Dispose();
             MinigameModel = null;
             IsMinigameLoaded = false;
-            CurrentMinigame = default;
             CurrentInputData = null;
         }
     }
@@ -105,5 +113,44 @@ public class MinigameManager : IMinigameManager
         }
         
         return null;
+    }
+
+    private void SubscribeToMinigameEvents()
+    {
+        if (MinigameModel != null)
+        {
+            MinigameModel.Finished += OnMinigameFinished;
+            MinigameModel.Faulted += OnMinigameFaulted;
+            MinigameModel.Closed += OnMinigameClosed;
+        }
+    }
+
+    private void UnsubscribeFromMinigameEvents()
+    {
+        if (MinigameModel != null)
+        {
+            MinigameModel.Finished -= OnMinigameFinished;
+            MinigameModel.Faulted -= OnMinigameFaulted;
+            MinigameModel.Closed -= OnMinigameClosed;
+        }
+    }
+
+    private void OnMinigameFinished(MinigameResultData result)
+    {
+        Debug.Log($"Minigame finished with status: {result.Status}");
+        // Handle minigame completion
+    }
+
+    private void OnMinigameFaulted(MinigameErrorData error)
+    {
+        Debug.LogError($"Minigame faulted: {error.Error}");
+        // Handle minigame error
+    }
+
+    private void OnMinigameClosed()
+    {
+        Debug.Log("Minigame closed");
+        // Handle minigame closure
+        DeloadMinigame();
     }
 }

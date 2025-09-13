@@ -4,7 +4,7 @@ public static class ResourceLoaderHelper
 {
     public static string GetMinigameSceneName(Minigames minigameId)
     {
-        return $"Resources/Minigames/{minigameId}/main.scene";
+        return $"Resources/Remote/Minigames/{minigameId}/main.scene";
     }
 
     public static async UniTask<SceneLoadResult> LoadMinigameScene(
