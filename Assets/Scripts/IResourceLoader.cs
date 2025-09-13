@@ -1,5 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using UnityEngine.SceneManagement;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 public interface IResourceLoader
 {
@@ -16,7 +16,7 @@ public class ResourceLoadResult
 public class SceneLoadResult
 {
     public ResourceLoadStatus Status;
-    public Scene SuccessData;
+    public SceneInstance SuccessData;
 }
 
 public interface ILoadingPercentHandler

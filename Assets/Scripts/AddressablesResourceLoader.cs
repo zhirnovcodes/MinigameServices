@@ -90,7 +90,7 @@ public class AddressablesResourceLoader : IResourceLoader
                         return new SceneLoadResult
                         {
                             Status = ResourceLoadStatus.Success,
-                            SuccessData = handle.Result.Scene
+                            SuccessData = handle.Result
                         };
                     }
                 case AsyncOperationStatus.Failed:

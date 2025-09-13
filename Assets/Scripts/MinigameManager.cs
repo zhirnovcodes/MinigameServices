@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -7,92 +6,170 @@ using Zenject;
 public class MinigameManager : IMinigameManager
 {
     private readonly IResourceLoader ResourceLoader;
-    private readonly MinigameLoadingCurtainPresenter LoadingCurtainPresenter;
 
-    private MinigameInputData CurrentInputData;
-    private bool IsMinigameLoaded = false;
+    private ILoadingPercentHandler PercentHandler;
     private IMinigameModel MinigameModel;
+
+    private IPlayerProgressModel Progress;
+
+    private MinigameInputDataMemoryPool InputPool;
+    private MinigamePlayerDataMemoryPool PlayerDataPool;
+
+    private MinigameInputData Input;
+
 
     [Inject]
     public MinigameManager(
         IResourceLoader resourceLoader,
-        MinigameLoadingCurtainPresenter loadingCurtainPresenter)
+        ILoadingPercentHandler percentHandler,
+        IPlayerProgressModel progress,
+        MinigameInputDataMemoryPool inputPool, 
+        MinigamePlayerDataMemoryPool playerDataPool)
     {
         ResourceLoader = resourceLoader;
-        LoadingCurtainPresenter = loadingCurtainPresenter;
+        PercentHandler = percentHandler;
+        Progress = progress;
+        InputPool = inputPool;
+        PlayerDataPool = playerDataPool;
     }
 
-    public async UniTaskVoid LoadMinigame(Minigames minigame, MinigameInputData input)
+    public async UniTask<bool> LoadMinigame(Minigames minigame)
     {
-        /*
-        LoadingCurtainPresenter.Enable();
-        
-        CurrentInputData = input;
-        
-        var result = await ResourceLoader.LoadMinigameScene(minigame, LoadingCurtainPresenter);
-        
-        if (result.Status == ResourceLoadStatus.Success)
-        {
-            // Load the scene asynchronously
-            var scene = ResourceLoaderHelper.GetMinigameSceneName(minigame);
-            var loadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            
-            await loadOperation;
-            
-            // Find IMinigameModel implementation in the loaded scene
-            var loadedScene = SceneManager.GetSceneByName(sceneName);
-            MinigameModel = FindMinigameModelInScene(loadedScene);
-            
-            if (MinigameModel == null)
-            {
-                Debug.LogError($"No IMinigameModel implementation found in scene: {minigame}");
-            }
-            else
-            {
-                IsMinigameLoaded = true;
-                SubscribeToMinigameEvents();
-                MinigameModel.Init(CurrentInputData);
-            }
-        }
-        else
+        Debug.Assert(MinigameModel != null, "You forgot to call Deload");
+
+        var loadResult = await ResourceLoader.LoadMinigameScene(minigame, PercentHandler);
+
+        if (loadResult.Status == ResourceLoadStatus.Fail)
         {
             Debug.LogError($"Failed to load minigame scene: {minigame}");
+            return false;
         }
-        LoadingCurtainPresenter.Disable();
-        */
+
+        var currentSceneInstance = loadResult.SuccessData;
+
+        await currentSceneInstance.ActivateAsync();
+
+        var scene = currentSceneInstance.Scene;
+
+        MinigameModel = FindModelInScene(scene);
+
+        if (MinigameModel == null)
+        {
+            Debug.LogError($"No IMinigameModel implementation found in scene: {minigame}");
+            return false;
+        }
+
+        SubscribeEvents();
+
+        CreateInputData();
+
+        MinigameModel.Init(Input);
+        return true;
     }
+
+    private void CreateInputData()
+    {
+        Input = InputPool.Spawn();
+
+        var playerData = PlayerDataPool.Spawn();
+
+        playerData.Cash = Progress.GetResources().GetCash();
+        playerData.Diamonds = Progress.GetResources().GetDiamonds();
+
+        Progress.GetResources().GetCharacters(playerData.CharacterCards);
+
+        Input.PlayerData.Add(playerData);
+    }
+
+    private void DestroyInputData()
+    {
+        foreach (var data in Input.PlayerData)
+        {
+            PlayerDataPool.Despawn(data);
+        }
+        InputPool.Despawn(Input);
+    }
+
 
     public async UniTaskVoid StartMinigame()
     {
-        if (!IsMinigameLoaded)
-        {
-            Debug.LogError("Cannot start minigame: minigame is not loaded");
-            return;
-        }
-
-        try
-        {
-            MinigameModel.Start();
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error starting minigame: {ex.Message}");
-        }
+        await MinigameModel.Start();
     }
+
 
     public void DeloadMinigame()
     {
-        if (IsMinigameLoaded)
+        if (MinigameModel == null)
         {
-            UnsubscribeFromMinigameEvents();
-            MinigameModel.Dispose();
-            MinigameModel = null;
-            IsMinigameLoaded = false;
-            CurrentInputData = null;
+            return;
+        }
+
+        DestroyInputData();
+
+        UnsubscribeEvents();
+        MinigameModel.Dispose();
+        MinigameModel = null;
+    }
+
+    private void SubscribeEvents()
+    {
+        MinigameModel.GameplayFinished += HandleGameplayFinished;
+    }
+
+    private void UnsubscribeEvents()
+    {
+        MinigameModel.GameplayFinished -= HandleGameplayFinished;
+    }
+
+    private void HandleGameplayFinished(MinigameResultData data)
+    {
+        Progress.GetStatistics().AddGamePlayed(data.Status);
+        ApplyRewards(data.Reward);
+        ApplyPenalties(data.Penalties);
+        Progress.Save();
+    }
+
+    private void ApplyRewards(MinigameRewardData rewards)
+    {
+        Progress.GetResources().AddCash(rewards.Cash);
+        Progress.GetResources().AddDiamonds(rewards.Diamonds);
+
+        foreach (var card in rewards.CharacterCards)
+        {
+            Progress.GetResources().AddCharacterCard(card);
         }
     }
 
-    private IMinigameModel FindMinigameModelInScene(Scene scene)
+    private void ApplyPenalties(MinigamePenaltiesData penalties)
+    {
+        foreach (var penalty in penalties.Penalties)
+        {
+            switch (penalty.Penalty)
+            {
+                case Penalties.Cash:
+                {
+                        // TODO remove actually part
+                    int removeCount = 
+                        penalty.Operation == PenaltyOperations.Remove ?
+                            penalty.Amount :
+                            Mathf.FloorToInt(Progress.GetResources().GetCash() / (float)penalty.Amount);
+                    Progress.GetResources().RemoveCash(removeCount);
+                    break;
+                }
+                case Penalties.Diamonds:
+                {
+                    int removeCount =
+                    penalty.Operation == PenaltyOperations.Remove ?
+                        penalty.Amount :
+                        Mathf.FloorToInt(Progress.GetResources().GetDiamonds() / (float)penalty.Amount);
+                    Progress.GetResources().RemoveDiamonds(removeCount);
+                    break;
+                }
+            }
+        }
+    }
+
+    private IMinigameModel FindModelInScene(Scene scene)
     {
         var rootObjects = scene.GetRootGameObjects();
         
@@ -113,44 +190,5 @@ public class MinigameManager : IMinigameManager
         }
         
         return null;
-    }
-
-    private void SubscribeToMinigameEvents()
-    {
-        if (MinigameModel != null)
-        {
-            MinigameModel.Finished += OnMinigameFinished;
-            MinigameModel.Faulted += OnMinigameFaulted;
-            MinigameModel.Closed += OnMinigameClosed;
-        }
-    }
-
-    private void UnsubscribeFromMinigameEvents()
-    {
-        if (MinigameModel != null)
-        {
-            MinigameModel.Finished -= OnMinigameFinished;
-            MinigameModel.Faulted -= OnMinigameFaulted;
-            MinigameModel.Closed -= OnMinigameClosed;
-        }
-    }
-
-    private void OnMinigameFinished(MinigameResultData result)
-    {
-        Debug.Log($"Minigame finished with status: {result.Status}");
-        // Handle minigame completion
-    }
-
-    private void OnMinigameFaulted(MinigameErrorData error)
-    {
-        Debug.LogError($"Minigame faulted: {error.Error}");
-        // Handle minigame error
-    }
-
-    private void OnMinigameClosed()
-    {
-        Debug.Log("Minigame closed");
-        // Handle minigame closure
-        DeloadMinigame();
     }
 }
