@@ -83,7 +83,7 @@ public class MetaUIView : MonoBehaviour
             var card = inst.GetComponent<CharacterCardMiniView>();
 
             card.SetParent(CharacterCardLayout);
-            card.SetCount(characterCards.Count);
+            card.SetCount(characterCards[i].Count);
             cardsImages[i].SetParent(card.GetPlaceholder(), false);
         }
     }

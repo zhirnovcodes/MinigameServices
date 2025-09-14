@@ -47,7 +47,7 @@ public class MinigameManager : IMinigameManager
 
     public async UniTask<bool> LoadMinigame(Minigames minigame)
     {
-        Debug.Assert(MinigameModel != null, "You forgot to call Deload");
+        Debug.Assert(MinigameModel == null, "You forgot to call Deload");
 
         var loadResult = await ResourceLoader.LoadMinigameScene(minigame, PercentHandler);
 
