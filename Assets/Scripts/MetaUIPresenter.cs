@@ -66,18 +66,18 @@ public class MetaUIPresenter : IDisposable
         View.SetCards(CardData, CardIcons);
     }
 
-    private Content.Local.Prefabs.MinigameResources.UI.S128 GetPrefabID(CharacterCards characterCard)
+    private Content.Local.Prefabs.CharacterCards.UI.S128 GetPrefabID(CharacterCards characterCard)
     {
         // TODO another way
         switch (characterCard)
         {
             case CharacterCards.Cat:
                 {
-                    return Content.Local.Prefabs.MinigameResources.UI.S128.Cat128;
+                    return Content.Local.Prefabs.CharacterCards.UI.S128.Cat128;
                 }
             case CharacterCards.Squid:
                 {
-                    return Content.Local.Prefabs.MinigameResources.UI.S128.Squid128;
+                    return Content.Local.Prefabs.CharacterCards.UI.S128.Squid128;
                 }
         }
 

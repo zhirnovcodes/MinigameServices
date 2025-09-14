@@ -88,7 +88,7 @@ public static class ResourceLoaderHelper
         fullName = fullName.Replace('+', '/');
 
         // Convert namespace dots to forward slashes for path and append enum value
-        var assetPath = $"{fullName.Replace('.', '/')}/{enumValue}";
+        var assetPath = $"Assets/{fullName.Replace('.', '/')}/{enumValue}.prefab";
 
         var result = await resourceLoader.LoadAsset(assetPath, percentHandler);
         

@@ -122,6 +122,41 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8642abc2c7c29e34fb2fbbe8baceb6ff
+    m_Address: Assets/Content/Local/Prefabs/UI/Pages/MetaUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec333661240f1894db5d4a486595ae51
+    m_Address: Assets/Content/Local/Prefabs/UI/Pages/MainUICanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67fba51bf4d52ba48996919df5073f02
+    m_Address: Assets/Content/Local/Prefabs/UI/Elements/SelectableButton.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67adbd3383d209847bc64da7b3bfc456
+    m_Address: Assets/Content/Local/Prefabs/UI/Elements/CharacterCardMini.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cecc45a3a101b0346839073855c81099
+    m_Address: Assets/Content/Local/Prefabs/UI/Pages
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ed5bdb683e462642ba5c80379b8875b
+    m_Address: Assets/Content/Local/Prefabs/UI/Elements
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d7b320e9f9720245860df45de17f52c
+    m_Address: Assets/Content/Local/Prefabs/UI/Pages/MinigameLoadingCurtain.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4eef7e369816c2c4795b972582e0faa0, type: 2}
   m_SchemaSet:

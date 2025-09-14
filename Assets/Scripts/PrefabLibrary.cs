@@ -28,6 +28,7 @@ public class PrefabLibrary : IPrefabLibrary
         }
 
         await UniTask.WhenAll(loadTasks);
+        Debug.Log(LoadedPrefabs);
     }
 
     public GameObject GetPrefab<T>(T key) where T : struct, IConvertible, IComparable, IFormattable

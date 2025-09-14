@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
+using Content.Local.Prefabs;
 
 public sealed class MinigameManagerBootstrapper : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
     {
 		await CreateResourceLoader();
 		await CreatePrefabLibrary();
+		await InstantiateMainUICanvas();
+		await InstantiateLoadingCurtain();
     }
 
 	private async UniTask CreateResourceLoader()
@@ -55,6 +58,53 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 		catch (System.Exception ex)
 		{
 			Debug.LogError($"Failed to create PrefabLibrary or preload assets: {ex.Message}");
+			throw;
+		}
+	}
+
+	private async UniTask InstantiateMainUICanvas()
+	{
+		try
+		{
+			Debug.Log("Instantiating MainUICanvas...");
+			var prefabLibrary = Container.Resolve<IPrefabLibrary>();
+			var mainUICanvas = prefabLibrary.InstantiatePrefab(UI.Pages.MainUICanvas);
+			
+			// Bind the main UI canvas GameObject to Zenject container
+			Container.Bind<GameObject>().WithId("MainUICanvas").FromInstance(mainUICanvas);
+			Debug.Log("MainUICanvas instantiated and bound to Zenject container");
+		}
+		catch (System.Exception ex)
+		{
+			Debug.LogError($"Failed to instantiate MainUICanvas: {ex.Message}");
+			throw;
+		}
+	}
+
+	private async UniTask InstantiateLoadingCurtain()
+	{
+		try
+		{
+			Debug.Log("Instantiating MinigameLoadingCurtain...");
+			var prefabLibrary = Container.Resolve<IPrefabLibrary>();
+			var loadingCurtain = prefabLibrary.InstantiatePrefab(UI.Pages.MinigameLoadingCurtain);
+			
+			// Get the MinigameLoadingCurtainView component and enable it
+			var loadingCurtainView = loadingCurtain.GetComponent<MinigameLoadingCurtainView>();
+			
+			// Bind to Zenject container for dependency injection
+			Container.Bind<MinigameLoadingCurtainView>().FromInstance(loadingCurtainView).AsSingle();
+			
+			// Create and bind the presenter
+			var presenter = Container.Instantiate<MinigameLoadingCurtainPresenter>();
+			Container.Bind<MinigameLoadingCurtainPresenter>().FromInstance(presenter).AsSingle();
+			Container.Bind<ILoadingPercentHandler>().To<MinigameLoadingCurtainPresenter>().FromInstance(presenter).AsSingle();
+			
+			Debug.Log("MinigameLoadingCurtain instantiated, enabled, and bound to Zenject container");
+		}
+		catch (System.Exception ex)
+		{
+			Debug.LogError($"Failed to instantiate MinigameLoadingCurtain: {ex.Message}");
 			throw;
 		}
 	}
