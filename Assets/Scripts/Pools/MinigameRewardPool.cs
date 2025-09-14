@@ -15,7 +15,7 @@ public class MinigameRewardMemoryPool : MemoryPool<MinigameRewardData>
 
     protected override void OnCreated(MinigameRewardData item)
     {
-        item.CharacterCards = new List<CharacterCards>();
+        item.CharacterCards = new List<CharacterCardsData>();
     }
 
     private void ResetRewardData(MinigameRewardData item)

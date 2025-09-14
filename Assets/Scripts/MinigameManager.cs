@@ -14,23 +14,35 @@ public class MinigameManager : IMinigameManager
 
     private MinigameInputDataMemoryPool InputPool;
     private MinigamePlayerDataMemoryPool PlayerDataPool;
+    private MinigameRewardMemoryPool RewardPool;
+    private MinigamePenaltyMemoryPool PenaltyPool;
 
     private MinigameInputData Input;
+    private MinigameResultData Result;
 
+    private MinigameServices Services;
 
     [Inject]
     public MinigameManager(
         IResourceLoader resourceLoader,
         ILoadingPercentHandler percentHandler,
         IPlayerProgressModel progress,
-        MinigameInputDataMemoryPool inputPool, 
-        MinigamePlayerDataMemoryPool playerDataPool)
+        MinigameInputDataMemoryPool inputPool,
+        MinigamePlayerDataMemoryPool playerDataPool,
+        MinigameServices services, 
+        MinigameRewardMemoryPool rewardPool, 
+        MinigamePenaltyMemoryPool penaltyPool)
     {
         ResourceLoader = resourceLoader;
         PercentHandler = percentHandler;
         Progress = progress;
         InputPool = inputPool;
         PlayerDataPool = playerDataPool;
+        Services = services;
+        RewardPool = rewardPool;
+        PenaltyPool = penaltyPool;
+
+        Result = new MinigameResultData();
     }
 
     public async UniTask<bool> LoadMinigame(Minigames minigame)
@@ -62,9 +74,18 @@ public class MinigameManager : IMinigameManager
         SubscribeEvents();
 
         CreateInputData();
+        CreateResutData();
 
-        MinigameModel.Init(Input);
+        MinigameModel.Init(Input, Result, Services);
         return true;
+    }
+
+    private void CreateResutData()
+    {
+        Result = Result ?? new MinigameResultData();
+
+        Result.Reward = RewardPool.Spawn();
+        Result.Penalties = PenaltyPool.Spawn();
     }
 
     private void CreateInputData()
@@ -90,8 +111,17 @@ public class MinigameManager : IMinigameManager
         InputPool.Despawn(Input);
     }
 
+    private void DestroyResultData()
+    {
+        RewardPool.Despawn(Result.Reward);
+        PenaltyPool.Despawn(Result.Penalties);
 
-    public async UniTaskVoid StartMinigame()
+        Result.Reward = null;
+        Result.Penalties = null;
+    }
+
+
+    public async UniTask StartMinigame()
     {
         await MinigameModel.Start();
     }
@@ -105,8 +135,10 @@ public class MinigameManager : IMinigameManager
         }
 
         DestroyInputData();
+        DestroyResultData();
 
         UnsubscribeEvents();
+
         MinigameModel.Dispose();
         MinigameModel = null;
     }
@@ -136,7 +168,7 @@ public class MinigameManager : IMinigameManager
 
         foreach (var card in rewards.CharacterCards)
         {
-            Progress.GetResources().AddCharacterCard(card);
+            Progress.GetResources().AddCharacterCard(card.ID, card.Count);
         }
     }
 

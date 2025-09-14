@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerResourcesModel : IPlayerResourcesModel
@@ -22,10 +23,18 @@ public class PlayerResourcesModel : IPlayerResourcesModel
 
     public bool HasCharacter(CharacterCards character)
     {
-        return ResourcesData.Characters.Contains(character);
+        foreach (var data in ResourcesData.Characters)
+        {
+            if (data.ID == character)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void GetCharacters(List<CharacterCards> result)
+    public void GetCharacters(List<CharacterCardsData> result)
     {
         result.Clear();
         result.AddRange(ResourcesData.Characters);
@@ -51,11 +60,26 @@ public class PlayerResourcesModel : IPlayerResourcesModel
         ResourcesData.Diamonds = Mathf.Max(0, ResourcesData.Diamonds - amount);
     }
 
-    public void AddCharacterCard(CharacterCards character)
+    public void AddCharacterCard(CharacterCards character, int countAdded)
     {
-        if (!ResourcesData.Characters.Contains(character))
+        for (int i = 0; i < ResourcesData.Characters.Count; i++)
         {
-            ResourcesData.Characters.Add(character);
+            if (ResourcesData.Characters[i].ID == character)
+            {
+                var count = ResourcesData.Characters[i].Count;
+                ResourcesData.Characters[i] = new CharacterCardsData
+                {
+                    ID = character,
+                    Count = count + countAdded
+                };
+                return;
+            }
         }
+
+        ResourcesData.Characters.Add(new CharacterCardsData
+        {
+            ID = character,
+            Count = countAdded
+        });
     }
 }

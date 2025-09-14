@@ -3,6 +3,6 @@
 public interface IMinigameManager
 {
     UniTask<bool> LoadMinigame(Minigames minigame);
-    UniTaskVoid StartMinigame();
+    UniTask StartMinigame();
     void DeloadMinigame();
 }

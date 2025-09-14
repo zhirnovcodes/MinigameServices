@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 [System.Serializable]
-public class MinigameConfig
+public struct MinigameConfig
 {
     public Minigames ID;
     public string Name;
@@ -20,19 +20,25 @@ public class MinigameInputData
     public List<MinigamePlayerData> PlayerData;
 }
 
+public struct CharacterCardsData
+{
+    public CharacterCards ID;
+    public int Count;
+}
+
 public class MinigamePlayerData
 {
     public string Name;
     public int Cash;
     public int Diamonds;
-    public List<CharacterCards> CharacterCards;
+    public List<CharacterCardsData> CharacterCards;
 }
 
 public class MinigameRewardData
 {
     public int Cash;
     public int Diamonds;
-    public List<CharacterCards> CharacterCards;
+    public List<CharacterCardsData> CharacterCards;
 }
 
 public class MinigamePenaltiesData

@@ -1,5 +1,5 @@
 ﻿public enum CharacterCards
 {
-    Will,
-    Emmy
+    Squid,
+    Cat
 }

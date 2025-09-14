@@ -5,6 +5,11 @@ public interface IMinigameModel : IDisposable
 {
     event Action<MinigameResultData> GameplayFinished;
 
-    void Init(MinigameInputData data);
+    void Init(MinigameInputData data, MinigameResultData resultData, MinigameServices services);
     UniTask Start();
+}
+
+public class MinigameServices
+{
+
 }

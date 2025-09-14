@@ -6,5 +6,5 @@ public class PlayerResourcesData
 {
     public int Cash;
     public int Diamonds;
-    public List<CharacterCards> Characters;
+    public List<CharacterCardsData> Characters;
 }

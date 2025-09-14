@@ -16,6 +16,6 @@ public class MinigamePlayerDataMemoryPool : MemoryPool<MinigamePlayerData>
     protected override void OnCreated(MinigamePlayerData item)
     {
         // Initialize with default values
-        item.CharacterCards = new List<CharacterCards>();
+        item.CharacterCards = new List<CharacterCardsData>();
     }
 }
