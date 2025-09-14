@@ -20,6 +20,7 @@ public class MinigameInputData
     public List<MinigamePlayerData> PlayerData;
 }
 
+[System.Serializable]
 public struct CharacterCardsData
 {
     public CharacterCards ID;
