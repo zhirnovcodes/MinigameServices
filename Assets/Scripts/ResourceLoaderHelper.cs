@@ -36,26 +36,6 @@ public static class ResourceLoaderHelper
         return await resourceLoader.LoadScene(sceneName, percentHandler);
     }
 
-    public static async UniTask<GameObject> GetUICharacterImage(
-        this IResourceLoader resourceLoader,
-        TextureSizes textureSize,
-        CharacterCards characterCard,
-        ILoadingPercentHandler percentHandler = null)
-    {
-        var sizeString = textureSize.ToString(); // Remove 'S' prefix
-        var characterString = characterCard.ToString();
-        var assetName = $"Content/Local/Prefabs/CharacterCards/UI/{sizeString}/{characterString}{sizeString}";
-        
-        var result = await resourceLoader.LoadAsset(assetName, percentHandler);
-        
-        if (result.Status == ResourceLoadStatus.Success && result.SuccessData is GameObject gameObject)
-        {
-            return gameObject;
-        }
-        
-        throw new System.Exception($"Failed to load UI character image: {assetName}");
-    }
-
     public static async UniTask<GameObject> LoadPrefab<T>(
         this IResourceLoader resourceLoader,
         T enumValue,
@@ -63,10 +43,12 @@ public static class ResourceLoaderHelper
     {
         var enumType = typeof(T);
         var fullName = enumType.FullName;
-        
+        fullName = fullName.Replace('+', '/');
+
         // Convert namespace dots to forward slashes for path
         var assetPath = fullName.Replace('.', '/');
-        
+        assetPath = $"Assets/{assetPath.Replace('.', '/')}/{enumValue}.prefab";
+
         var result = await resourceLoader.LoadAsset(assetPath, percentHandler);
         
         if (result.Status == ResourceLoadStatus.Success && result.SuccessData is GameObject gameObject)
@@ -98,6 +80,30 @@ public static class ResourceLoaderHelper
         }
         
         Debug.LogError($"Failed to load prefab: {assetPath}");
+        return null;
+    }
+
+    public static async UniTask<ScriptableObject> LoadConfig<T>(
+        this IResourceLoader resourceLoader,
+        T enumValue,
+        ILoadingPercentHandler percentHandler = null) where T : struct, IConvertible, IComparable, IFormattable
+    {
+        var enumType = typeof(T);
+        var fullName = enumType.FullName;
+        fullName = fullName.Replace('+', '/');
+
+        // Convert namespace dots to forward slashes for path
+        var assetPath = fullName.Replace('.', '/');
+        assetPath = $"Assets/{assetPath.Replace('.', '/')}/{enumValue}.asset";
+
+        var result = await resourceLoader.LoadAsset(assetPath, percentHandler);
+
+        if (result.Status == ResourceLoadStatus.Success && result.SuccessData is ScriptableObject so)
+        {
+            return so;
+        }
+
+        Debug.LogError($"Failed to load config: {assetPath}");
         return null;
     }
 }

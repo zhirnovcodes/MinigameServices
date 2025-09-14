@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
 using Content.Local.Prefabs;
+using Content.Local.Configs;
 
 public sealed class MinigameManagerBootstrapper : MonoBehaviour
 {
@@ -20,7 +21,11 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 		await CreatePrefabLibrary();
 		await InstantiateMainUICanvas();
 		await InstantiateLoadingCurtain();
-    }
+		await LoadConfigs();
+		await LoadPlayerProgress();
+		await CreateMemoryPools();
+		await CreateMinigameManager();
+	}
 
 	private async UniTask CreateResourceLoader()
 	{
@@ -98,13 +103,113 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 			// Create and bind the presenter
 			var presenter = Container.Instantiate<MinigameLoadingCurtainPresenter>();
 			Container.Bind<MinigameLoadingCurtainPresenter>().FromInstance(presenter).AsSingle();
-			Container.Bind<ILoadingPercentHandler>().To<MinigameLoadingCurtainPresenter>().FromInstance(presenter).AsSingle();
+			Container.Bind<ILoadingPercentHandler>().FromInstance(presenter).AsSingle();
 			
 			Debug.Log("MinigameLoadingCurtain instantiated, enabled, and bound to Zenject container");
 		}
 		catch (System.Exception ex)
 		{
 			Debug.LogError($"Failed to instantiate MinigameLoadingCurtain: {ex.Message}");
+			throw;
+		}
+	}
+
+	private async UniTask LoadConfigs()
+	{
+		try
+		{
+			Debug.Log("Loading configs...");
+			var resourceLoader = Container.Resolve<IResourceLoader>();
+			var loadingHandler = Container.Resolve<ILoadingPercentHandler>();
+			
+			// Load MinigamesConfig using LoadConfig extension method
+			var minigamesConfig = await resourceLoader.LoadConfig(Content.Local.Configs.Minigames.MinigamesConfig, loadingHandler);
+			
+			if (minigamesConfig != null && minigamesConfig is MinigamesConfig config)
+			{
+				// Create and bind the config model
+				var configModel = new MinigameConfigModel(config);
+				Container.Bind<MinigameConfigModel>().FromInstance(configModel).AsSingle();
+				
+				Debug.Log("MinigamesConfig loaded and bound to Zenject container");
+			}
+			else
+			{
+				Debug.LogError("Failed to load MinigamesConfig");
+				throw new System.Exception("Failed to load MinigamesConfig");
+			}
+		}
+		catch (System.Exception ex)
+		{
+			Debug.LogError($"Failed to load configs: {ex.Message}");
+			throw;
+		}
+	}
+
+	private async UniTask LoadPlayerProgress()
+	{
+		try
+		{
+			Debug.Log("Loading player progress...");
+			var playerProgressModel = new PlayerProgressModel();
+			playerProgressModel.Load();
+			
+			Container.Bind<IPlayerProgressModel>().FromInstance(playerProgressModel).AsSingle();
+			Debug.Log("Player progress loaded and bound to Zenject container");
+		}
+		catch (System.Exception ex)
+		{
+			Debug.LogError($"Failed to load player progress: {ex.Message}");
+			throw;
+		}
+	}
+
+	private async UniTask CreateMemoryPools()
+	{
+		try
+		{
+			Debug.Log("Creating memory pools...");
+			
+			// Create memory pools
+			var inputDataPool = new MinigameInputDataMemoryPool();
+			var playerDataPool = new MinigamePlayerDataMemoryPool();
+			var rewardPool = new MinigameRewardMemoryPool();
+			var penaltyPool = new MinigamePenaltyMemoryPool();
+			
+			// Bind memory pools to Zenject container
+			Container.Bind<MinigameInputDataMemoryPool>().FromInstance(inputDataPool).AsSingle();
+			Container.Bind<MinigamePlayerDataMemoryPool>().FromInstance(playerDataPool).AsSingle();
+			Container.Bind<MinigameRewardMemoryPool>().FromInstance(rewardPool).AsSingle();
+			Container.Bind<MinigamePenaltyMemoryPool>().FromInstance(penaltyPool).AsSingle();
+			
+			Debug.Log("Memory pools created and bound to Zenject container");
+		}
+		catch (System.Exception ex)
+		{
+			Debug.LogError($"Failed to create memory pools: {ex.Message}");
+			throw;
+		}
+	}
+
+	private async UniTask CreateMinigameManager()
+	{
+		try
+		{
+			Debug.Log("Creating MinigameServices...");
+			var minigameServices = Container.Instantiate<MinigameServices>();
+			Container.Bind<MinigameServices>().FromInstance(minigameServices).AsSingle();
+			Debug.Log("MinigameServices created and bound to Zenject container");
+			
+			Debug.Log("Creating MinigameManager...");
+			var minigameManager = Container.Instantiate<MinigameManager>();
+			
+			Container.Bind<IMinigameManager>().FromInstance(minigameManager).AsSingle();
+			
+			Debug.Log("MinigameManager created and bound to Zenject container");
+		}
+		catch (System.Exception ex)
+		{
+			Debug.LogError($"Failed to create MinigameManager: {ex.Message}");
 			throw;
 		}
 	}

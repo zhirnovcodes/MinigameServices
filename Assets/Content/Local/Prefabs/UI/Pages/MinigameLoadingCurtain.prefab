@@ -622,7 +622,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Slider: {fileID: 6331756584593966598}
-  Text: {fileID: 0}
+  Text: {fileID: 6105933375405091912}
 --- !u!1 &5931105963444308502
 GameObject:
   m_ObjectHideFlags: 0

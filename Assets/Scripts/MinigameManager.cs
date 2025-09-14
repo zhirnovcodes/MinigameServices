@@ -29,9 +29,9 @@ public class MinigameManager : IMinigameManager
         IPlayerProgressModel progress,
         MinigameInputDataMemoryPool inputPool,
         MinigamePlayerDataMemoryPool playerDataPool,
-        MinigameServices services, 
         MinigameRewardMemoryPool rewardPool, 
-        MinigamePenaltyMemoryPool penaltyPool)
+        MinigamePenaltyMemoryPool penaltyPool,
+        MinigameServices services)
     {
         ResourceLoader = resourceLoader;
         PercentHandler = percentHandler;

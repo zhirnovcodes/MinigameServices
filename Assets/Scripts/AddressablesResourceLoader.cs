@@ -9,50 +9,13 @@ public class AddressablesResourceLoader : IResourceLoader
 {
     public async UniTask<ResourceLoadResult> LoadAsset(string name, ILoadingPercentHandler percentHandler = null)
     {
+        AsyncOperationHandle<UnityEngine.Object> handle;
+
         try
         {
-            var handle = Addressables.LoadAssetAsync<UnityEngine.Object>(name);
-            
-            if (percentHandler == null)
-            {
-                await handle;
-            }
-            else
-            {
-                while (handle.IsDone == false)
-                {
-                    percentHandler.SetLoadingPercent(handle.PercentComplete);
-                    await UniTask.Yield();
-                }
-            }
-
-            switch (handle.Status)
-            {
-                case AsyncOperationStatus.Succeeded:
-                {
-                    return new ResourceLoadResult
-                    {
-                        Status = ResourceLoadStatus.Success,
-                        SuccessData = handle.Result
-                    };
-                }
-                case AsyncOperationStatus.Failed:
-                {
-                    return new ResourceLoadResult
-                    {
-                        Status = ResourceLoadStatus.Fail
-                    };
-                }
-                default:
-                {
-                    return new ResourceLoadResult
-                    {
-                        Status = ResourceLoadStatus.Fail
-                    };
-                }
-
-            }
+            handle = Addressables.LoadAssetAsync<UnityEngine.Object>(name);
         }
+
         catch (Exception ex)
         {
             Debug.LogError($"Exception while loading asset '{name}': {ex.Message}");
@@ -61,6 +24,46 @@ public class AddressablesResourceLoader : IResourceLoader
                 Status = ResourceLoadStatus.Fail,
                 SuccessData = null
             };
+        };
+            
+        if (percentHandler == null)
+        {
+            await handle;
+        }
+        else
+        {
+            while (handle.IsDone == false)
+            {
+                percentHandler.SetLoadingPercent(handle.PercentComplete);
+                await UniTask.Yield();
+            }
+        }
+
+        switch (handle.Status)
+        {
+            case AsyncOperationStatus.Succeeded:
+            {
+                return new ResourceLoadResult
+                {
+                    Status = ResourceLoadStatus.Success,
+                    SuccessData = handle.Result
+                };
+            }
+            case AsyncOperationStatus.Failed:
+            {
+                return new ResourceLoadResult
+                {
+                    Status = ResourceLoadStatus.Fail
+                };
+            }
+            default:
+            {
+                return new ResourceLoadResult
+                {
+                    Status = ResourceLoadStatus.Fail
+                };
+            }
+
         }
     }
 

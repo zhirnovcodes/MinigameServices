@@ -1,7 +1,10 @@
-﻿public class MinigameConfigModel
+﻿using Zenject;
+
+public class MinigameConfigModel
 {
     private MinigamesConfig Config;
 
+    [Inject]
     public MinigameConfigModel(MinigamesConfig config)
     {
         Config = config;

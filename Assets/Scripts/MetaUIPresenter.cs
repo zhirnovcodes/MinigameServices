@@ -20,7 +20,8 @@ public class MetaUIPresenter : IDisposable
     public MetaUIPresenter(MetaUIView view,
         IMinigameManager minigameManager,
         MinigameConfigModel config,
-        IPlayerResourcesModel resources, IPrefabLibrary prefabLibrary)
+        IPlayerResourcesModel resources, 
+        IPrefabLibrary prefabLibrary)
     {
         View = view;
         MinigameManager = minigameManager;

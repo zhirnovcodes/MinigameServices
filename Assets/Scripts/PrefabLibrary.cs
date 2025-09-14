@@ -86,27 +86,6 @@ public class PrefabLibrary : IPrefabLibrary
         LoadedPrefabs.Clear();
     }
 
-    private async UniTask PreloadPrefabs<T>() where T : struct, IConvertible, IComparable, IFormattable
-    {
-        var enumType = typeof(T);
-        foreach (T prefabKey in Enum.GetValues(enumType))
-        {
-            var result = await ResourceLoader.LoadPrefab(prefabKey);
-
-            if (result == null == false)
-            {
-                var enumValueInt = Convert.ToInt32(prefabKey);
-
-                if (!LoadedPrefabs.ContainsKey(enumType))
-                {
-                    LoadedPrefabs[enumType] = new Dictionary<int, GameObject>();
-                }
-
-                LoadedPrefabs[enumType][enumValueInt] = result;
-            }
-        }
-    }
-
     private async UniTask PreloadPrefabs(Type enumType) 
     {
         foreach (object prefabKey in Enum.GetValues(enumType))
