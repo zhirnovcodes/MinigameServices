@@ -48,6 +48,6 @@ public class SelectableButton : MonoBehaviour
 
     private void HandleClick()
     {
-        OnClicked?.Invoke();
+        OnClicked.Invoke();
     }
 }

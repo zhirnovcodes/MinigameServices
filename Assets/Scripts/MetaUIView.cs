@@ -52,12 +52,6 @@ public class MetaUIView : MonoBehaviour
 
     public int AddButton(string name)
     {
-        if (ButtonPrefab == null)
-        {
-            Debug.LogError("ButtonPrefab is not assigned!");
-            return -1;
-        }
-
         // Create new button instance
         var buttonInstanceGameObject = Instantiate(ButtonPrefab.gameObject, LayoutGroup.transform, false);
         var buttonInstance = buttonInstanceGameObject.GetComponent<SelectableButton>();

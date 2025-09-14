@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8669568895115046521}
   - component: {fileID: 5688814179100637618}
   - component: {fileID: 694590809912881538}
-  - component: {fileID: 207430090791680854}
   m_Layer: 5
   m_Name: SelectedButton
   m_TagString: Untagged
@@ -121,21 +120,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &207430090791680854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 671305615174382072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb5b1b295133ab48ab35b63ce76ca9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Selected: {fileID: 0}
-  Unselected: {fileID: 0}
-  Text: {fileID: 0}
 --- !u!1 &1015065575543379771
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -282,7 +266,6 @@ GameObject:
   - component: {fileID: 2100120824801049898}
   - component: {fileID: 1167535204103578006}
   - component: {fileID: 4308954761320317496}
-  - component: {fileID: 170569273941327317}
   m_Layer: 5
   m_Name: UnselectedButton
   m_TagString: Untagged
@@ -391,21 +374,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &170569273941327317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1810265298411745202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb5b1b295133ab48ab35b63ce76ca9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Selected: {fileID: 0}
-  Unselected: {fileID: 0}
-  Text: {fileID: 0}
 --- !u!1 &5572871439190839467
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,7 +411,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3463868700221098522
 MonoBehaviour:

@@ -46,6 +46,11 @@ public class PlayerProgressModel : IPlayerProgressModel
             PlayerData = JsonUtility.FromJson<PlayerData>(jsonData);
         }
 
+        if (PlayerData.Resources.Characters == null)
+        {
+            PlayerData.Resources.Characters = new System.Collections.Generic.List<CharacterCardsData>();
+        }
+
         ResourcesModel = new PlayerResourcesModel(PlayerData.Resources);
         StatisticsModel = new PlayerStatisticsModel(PlayerData.Statistics);
     }

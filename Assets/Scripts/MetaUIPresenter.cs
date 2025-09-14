@@ -9,7 +9,7 @@ public class MetaUIPresenter : IDisposable
     private readonly MetaUIView View;
     private readonly IMinigameManager MinigameManager;
     private readonly MinigameConfigModel Config;
-    private readonly IPlayerResourcesModel Resources;
+    private readonly IPlayerProgressModel PlayerModel;
     private readonly IPrefabLibrary PrefabLibrary;
 
     private int SelectedIndex;
@@ -20,7 +20,7 @@ public class MetaUIPresenter : IDisposable
     public MetaUIPresenter(MetaUIView view,
         IMinigameManager minigameManager,
         MinigameConfigModel config,
-        IPlayerResourcesModel resources, 
+        IPlayerProgressModel playerModel, 
         IPrefabLibrary prefabLibrary)
     {
         View = view;
@@ -30,7 +30,7 @@ public class MetaUIPresenter : IDisposable
         CreateButtons();
 
         HandleMinigameButtonClicked(0);
-        Resources = resources;
+        PlayerModel = playerModel;
         PrefabLibrary = prefabLibrary;
     }
 
@@ -51,11 +51,11 @@ public class MetaUIPresenter : IDisposable
 
     private void UpdateResources()
     {
-        View.SetResources(Resources.GetDiamonds(), Resources.GetCash());
+        View.SetResources(PlayerModel.GetResources().GetDiamonds(), PlayerModel.GetResources().GetCash());
         DisposeIcons();
 
         CardData.Clear();
-        Resources.GetCharacters(CardData);
+        PlayerModel.GetResources().GetCharacters(CardData);
 
         foreach (var card in CardData)
         {
