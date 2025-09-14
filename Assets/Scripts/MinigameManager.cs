@@ -123,9 +123,8 @@ public class MinigameManager : IMinigameManager
 
     public async UniTask StartMinigame()
     {
-        await MinigameModel.Start();
+        await MinigameModel.StartGame();
     }
-
 
     public void DeloadMinigame()
     {
@@ -141,6 +140,10 @@ public class MinigameManager : IMinigameManager
 
         MinigameModel.Dispose();
         MinigameModel = null;
+
+        //DeloadScene();
+
+        //OpenMainScene();
     }
 
     private void SubscribeEvents()

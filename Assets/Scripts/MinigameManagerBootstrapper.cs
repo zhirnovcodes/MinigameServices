@@ -121,17 +121,11 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 	{
 		Debug.Log("Creating memory pools...");
 		
-		// Create memory pools
-		var inputDataPool = new MinigameInputDataMemoryPool();
-		var playerDataPool = new MinigamePlayerDataMemoryPool();
-		var rewardPool = new MinigameRewardMemoryPool();
-		var penaltyPool = new MinigamePenaltyMemoryPool();
-		
-		// Bind memory pools to Zenject container
-		Container.Bind<MinigameInputDataMemoryPool>().FromInstance(inputDataPool).AsSingle();
-		Container.Bind<MinigamePlayerDataMemoryPool>().FromInstance(playerDataPool).AsSingle();
-		Container.Bind<MinigameRewardMemoryPool>().FromInstance(rewardPool).AsSingle();
-		Container.Bind<MinigamePenaltyMemoryPool>().FromInstance(penaltyPool).AsSingle();
+		// Bind memory pools using Zenject's proper memory pool binding
+		Container.BindMemoryPool<MinigameInputData, MinigameInputDataMemoryPool>();
+		Container.BindMemoryPool<MinigamePlayerData, MinigamePlayerDataMemoryPool>();
+		Container.BindMemoryPool<MinigameRewardData, MinigameRewardMemoryPool>();
+		Container.BindMemoryPool<MinigamePenaltiesData, MinigamePenaltyMemoryPool>();
 		
 		Debug.Log("Memory pools created and bound to Zenject container");
 	}

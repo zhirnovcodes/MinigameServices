@@ -149,6 +149,8 @@ public class MetaUIPresenter : IDisposable
         {
             Debug.LogError($"Failed to load minigame: {selectedMinigame}");
         }
+
+        MinigameManager.DeloadMinigame();
     }
 
     public void Dispose()
