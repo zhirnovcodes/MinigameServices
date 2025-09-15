@@ -22,7 +22,7 @@ public class MinigameManager : IMinigameManager
     private MinigameInputData Input;
     private MinigameResultData Result;
 
-    private MinigameServices Services;
+    private IMinigameServicesController Services;
     
     private object CurrentSceneInstance;
 
@@ -35,7 +35,7 @@ public class MinigameManager : IMinigameManager
         MinigamePlayerDataMemoryPool playerDataPool,
         MinigameRewardMemoryPool rewardPool, 
         MinigamePenaltyMemoryPool penaltyPool,
-        MinigameServices services)
+        IMinigameServicesController services)
     {
         SceneManager = sceneManager;
         PercentHandler = percentHandler;
@@ -77,6 +77,8 @@ public class MinigameManager : IMinigameManager
 
         CreateInputData();
         CreateResutData();
+
+        Services.SetUp(minigame);
 
         MinigameModel.Init(Input, Result, Services);
         return true;
@@ -142,6 +144,8 @@ public class MinigameManager : IMinigameManager
 
         MinigameModel.Dispose();
         MinigameModel = null;
+        
+        Services.Clear();
 
         CloseScene();
 

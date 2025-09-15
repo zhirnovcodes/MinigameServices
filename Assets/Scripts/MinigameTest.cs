@@ -57,7 +57,9 @@ public class MinigameTest : MonoBehaviour
             }
         };
 
-        var services = new MinigameServices();
+        var resourceLoader = new AddressablesResourceLoader();
+        var localPrefabsLibrary = new PrefabLibrary(resourceLoader);
+        var services = new MinigameServices(resourceLoader, localPrefabsLibrary);
 
         Model.GameplayFinished += HandleGameplayFinished;
 

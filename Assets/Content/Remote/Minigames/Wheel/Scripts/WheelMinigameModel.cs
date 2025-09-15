@@ -8,7 +8,7 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
 
     private MinigameResultData ResultData;
 
-    public void Init(MinigameInputData data, MinigameResultData resultData, MinigameServices services)
+    public void Init(MinigameInputData data, MinigameResultData resultData, IMinigameServices services)
     {
         ResultData = resultData;
     }

@@ -157,6 +157,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54375abcd83fa7c4984ccc6f06267a22
+    m_Address: Assets/Content/Local/Prefabs/Effects/Particles/CashFlow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4eef7e369816c2c4795b972582e0faa0, type: 2}
   m_SchemaSet:

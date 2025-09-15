@@ -2,33 +2,22 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
 
 public class PrefabLibrary : IPrefabLibrary
 {
     private readonly IResourceLoader ResourceLoader;
     private readonly Dictionary<Type, Dictionary<int, GameObject>> LoadedPrefabs = new Dictionary<Type, Dictionary<int, GameObject>>();
 
+    private string RootFolder = "Assets";
+
     public PrefabLibrary(IResourceLoader resourceLoader)
     {
         ResourceLoader = resourceLoader;
     }
 
-    public async UniTask PreloadAllAssets()
+    public void SetRootFolderName(string name)
     {
-        // Get all enum types from the LocalPrefabs namespace
-        var enumTypes = GetLocalPrefabEnumTypes();
-        
-        var loadTasks = new List<UniTask>();
-        
-        foreach (var enumType in enumTypes)
-        {
-            loadTasks.Add(PreloadPrefabs(enumType));
-        }
-
-        await UniTask.WhenAll(loadTasks);
-        Debug.Log(LoadedPrefabs);
+        RootFolder = name;
     }
 
     public GameObject GetPrefab<T>(T key) where T : struct, IConvertible, IComparable, IFormattable
@@ -51,22 +40,14 @@ public class PrefabLibrary : IPrefabLibrary
         return UnityEngine.Object.Instantiate(prefab);
     }
 
-    public void ReleasePrefab<T>(string key)
+    public void Clear()
     {
-        var enumType = typeof(T);
-        
-        if (LoadedPrefabs.TryGetValue(enumType, out var prefabDictionary))
+        foreach (var dict in LoadedPrefabs.Values)
         {
-            // Remove the specific prefab from the dictionary
-            // Note: The key parameter should ideally be the enum value converted to string
-            // This is a simplified implementation
-            
-            // If no prefabs left for this enum type, remove the entire type entry
-            if (prefabDictionary.Count == 0)
-            {
-                LoadedPrefabs.Remove(enumType);
-            }
+            dict.Clear();
         }
+
+        LoadedPrefabs.Clear();
     }
 
     public void Dispose()
@@ -86,11 +67,11 @@ public class PrefabLibrary : IPrefabLibrary
         LoadedPrefabs.Clear();
     }
 
-    private async UniTask PreloadPrefabs(Type enumType) 
+    public async UniTask PreloadPrefabs(Type enumType) 
     {
         foreach (object prefabKey in Enum.GetValues(enumType))
         {
-            var result = await ResourceLoader.LoadPrefab(enumType, prefabKey);
+            var result = await ResourceLoader.LoadPrefab(enumType, prefabKey, null, RootFolder);
 
             if (result == null == false)
             {
@@ -104,13 +85,5 @@ public class PrefabLibrary : IPrefabLibrary
                 LoadedPrefabs[enumType][enumValueInt] = result;
             }
         }
-    }
-
-    private List<System.Type> GetLocalPrefabEnumTypes()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        return assembly.GetTypes()
-            .Where(t => t.IsEnum && t.Namespace?.StartsWith("Content.Local.Prefabs") == true)
-            .ToList();
     }
 }

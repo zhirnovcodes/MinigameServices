@@ -2,11 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IGameObjectPool : IDisposable
+{
+    GameObject Pool<T>(T key) where T : struct, System.IConvertible, System.IComparable, System.IFormattable;
+    void Pop(GameObject gameObject);
+    void Clear();
+}
+
 /// <summary>
 /// GameObject pool that uses PrefabLibrary to instantiate prefabs with enum keys.
 /// Provides efficient GameObject pooling to reduce instantiation overhead and garbage collection.
 /// </summary>
-public class GameObjectPool : IDisposable 
+public class GameObjectPool : IGameObjectPool 
 {
     private readonly IPrefabLibrary PrefabLibrary;
     private readonly Dictionary<System.Type, Dictionary<int, Queue<GameObject>>> PooledObjects = new Dictionary<System.Type, Dictionary<int, Queue<GameObject>>>();

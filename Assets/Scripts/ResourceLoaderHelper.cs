@@ -48,7 +48,8 @@ public static class ResourceLoaderHelper
     public static async UniTask<GameObject> LoadPrefab<T>(
         this IResourceLoader resourceLoader,
         T enumValue,
-        ILoadingPercentHandler percentHandler = null) where T : struct, IConvertible, IComparable, IFormattable
+        ILoadingPercentHandler percentHandler = null,
+        string rootFolder = "Assets") where T : struct, IConvertible, IComparable, IFormattable
     {
         var enumType = typeof(T);
         var fullName = enumType.FullName;
@@ -56,7 +57,7 @@ public static class ResourceLoaderHelper
 
         // Convert namespace dots to forward slashes for path
         var assetPath = fullName.Replace('.', '/');
-        assetPath = $"Assets/{assetPath.Replace('.', '/')}/{enumValue}.prefab";
+        assetPath = $"{rootFolder}/{assetPath.Replace('.', '/')}/{enumValue}.prefab";
 
         var result = await resourceLoader.LoadAsset(assetPath, percentHandler);
         
@@ -73,13 +74,14 @@ public static class ResourceLoaderHelper
         this IResourceLoader resourceLoader,
         Type enumType,
         object enumValue,
-        ILoadingPercentHandler percentHandler = null)
+        ILoadingPercentHandler percentHandler = null,
+        string rootFolder = "Assets")
     {
         var fullName = enumType.FullName;
         fullName = fullName.Replace('+', '/');
 
         // Convert namespace dots to forward slashes for path and append enum value
-        var assetPath = $"Assets/{fullName.Replace('.', '/')}/{enumValue}.prefab";
+        var assetPath = $"{rootFolder}/{fullName.Replace('.', '/')}/{enumValue}.prefab";
 
         var result = await resourceLoader.LoadAsset(assetPath, percentHandler);
         
@@ -95,7 +97,8 @@ public static class ResourceLoaderHelper
     public static async UniTask<ScriptableObject> LoadConfig<T>(
         this IResourceLoader resourceLoader,
         T enumValue,
-        ILoadingPercentHandler percentHandler = null) where T : struct, IConvertible, IComparable, IFormattable
+        ILoadingPercentHandler percentHandler = null,
+        string rootFolder = "Assets") where T : struct, IConvertible, IComparable, IFormattable
     {
         var enumType = typeof(T);
         var fullName = enumType.FullName;
@@ -103,7 +106,7 @@ public static class ResourceLoaderHelper
 
         // Convert namespace dots to forward slashes for path
         var assetPath = fullName.Replace('.', '/');
-        assetPath = $"Assets/{assetPath.Replace('.', '/')}/{enumValue}.asset";
+        assetPath = $"{rootFolder}/{assetPath.Replace('.', '/')}/{enumValue}.asset";
 
         var result = await resourceLoader.LoadAsset(assetPath, percentHandler);
 

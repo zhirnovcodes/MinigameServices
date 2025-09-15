@@ -1,5 +1,15 @@
 namespace Content.Local.Prefabs
 {
+    public static class Effects
+    {
+        public enum Particles
+        {
+            CashFlow,
+            DiamondsRain,
+            Victory
+        }
+    }
+
     public static class UI
     {
         public enum Pages

@@ -4,6 +4,9 @@ using UnityEngine.AddressableAssets;
 using Zenject;
 using Content.Local.Prefabs;
 using Content.Local.Configs;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 
 public sealed class MinigameManagerBootstrapper : MonoBehaviour
 {
@@ -58,7 +61,7 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 		Debug.Log("IPrefabLibrary bound successfully");
 		
 		Debug.Log("Preloading all assets...");
-		await prefabLibrary.PreloadAllAssets();
+		await PreloadAllAssets();
 		Debug.Log("All assets preloaded successfully");
 	}
 
@@ -159,7 +162,8 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 	{
 		Debug.Log("Creating MinigameServices...");
 		var minigameServices = Container.Instantiate<MinigameServices>();
-		Container.Bind<MinigameServices>().FromInstance(minigameServices).AsSingle();
+		Container.Bind<IMinigameServicesController>().FromInstance(minigameServices).AsSingle();
+		Container.Bind<IMinigameServices>().FromInstance(minigameServices).AsSingle();
 		Debug.Log("MinigameServices created and bound to Zenject container");
 		
 		Debug.Log("Creating MinigameManager...");
@@ -198,5 +202,33 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 		presenter.Enable(); 
 
 		Debug.Log("MetaUI created and bound to Zenject container");
+	}
+
+
+
+
+	private async UniTask PreloadAllAssets()
+	{
+		var library = Container.Resolve<IPrefabLibrary>();
+		// Get all enum types from the LocalPrefabs namespace
+		var enumTypes = GetLocalPrefabEnumTypes();
+
+		var loadTasks = new List<UniTask>();
+
+		foreach (var enumType in enumTypes)
+		{
+			loadTasks.Add(library.PreloadPrefabs(enumType));
+		}
+
+		await UniTask.WhenAll(loadTasks);
+	}
+
+
+	private List<System.Type> GetLocalPrefabEnumTypes()
+	{
+		var assembly = Assembly.GetExecutingAssembly();
+		return assembly.GetTypes()
+			.Where(t => t.IsEnum && t.Namespace?.StartsWith("Content.Local.Prefabs") == true)
+			.ToList();
 	}
 }
