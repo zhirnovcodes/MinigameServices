@@ -36,6 +36,15 @@ public static class ResourceLoaderHelper
         return await resourceLoader.LoadScene(sceneName, percentHandler);
     }
 
+    public static async UniTask<object> LoadMinigameScene(
+        this SceneManager manager,
+        Minigames minigameId,
+        ILoadingPercentHandler percentHandler = null)
+    {
+        var sceneName = GetMinigameSceneName(minigameId);
+        return await manager.LoadScene(sceneName, percentHandler);
+    }
+
     public static async UniTask<GameObject> LoadPrefab<T>(
         this IResourceLoader resourceLoader,
         T enumValue,

@@ -5,6 +5,7 @@ public interface IResourceLoader
 {
     UniTask<ResourceLoadResult> LoadAsset(string name, ILoadingPercentHandler percentHandler = null);
     UniTask<SceneLoadResult> LoadScene(string name, ILoadingPercentHandler percentHandler = null);
+    UniTask DeloadScene(SceneInstance handler);
 }
 
 public class ResourceLoadResult

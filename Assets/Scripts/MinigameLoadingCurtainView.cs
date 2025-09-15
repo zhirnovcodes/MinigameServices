@@ -6,6 +6,11 @@ public class MinigameLoadingCurtainView : MonoBehaviour
     public GameObject Content;
     public LoadingProgressBar Bar;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     public void Enable()
     {
         Content.SetActive(true);

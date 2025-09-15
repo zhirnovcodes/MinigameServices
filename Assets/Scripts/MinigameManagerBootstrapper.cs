@@ -7,10 +7,19 @@ using Content.Local.Configs;
 
 public sealed class MinigameManagerBootstrapper : MonoBehaviour
 {
+	private static MinigameManagerBootstrapper Instance;
 	private DiContainer Container;
 
 	private void Awake()
 	{
+		if (Instance != null && Instance != this)
+		{
+			Destroy(this.gameObject);
+			return;
+		}
+		
+		Instance = this;
+		DontDestroyOnLoad(this.gameObject);
 		Container = ProjectContext.Instance.Container;
 		InitializeGameAsync().Forget();
 	}
@@ -24,6 +33,7 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 		await LoadConfigs();
 		await LoadPlayerProgress();
 		await CreateMemoryPools();
+		await CreateSceneManager();
 		await CreateMinigameManager();
 		await CreateMetaUI();
 	}
@@ -57,6 +67,8 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 		Debug.Log("Instantiating MainUICanvas...");
 		var prefabLibrary = Container.Resolve<IPrefabLibrary>();
 		var mainUICanvas = prefabLibrary.InstantiatePrefab(UI.Pages.MainUICanvas);
+
+		DontDestroyOnLoad(mainUICanvas);
 		
 		// Bind the main UI canvas GameObject to Zenject container
 		Container.Bind<GameObject>().WithId("MainUICanvas").FromInstance(mainUICanvas);
@@ -127,7 +139,20 @@ public sealed class MinigameManagerBootstrapper : MonoBehaviour
 		Container.BindMemoryPool<MinigameRewardData, MinigameRewardMemoryPool>();
 		Container.BindMemoryPool<MinigamePenaltiesData, MinigamePenaltyMemoryPool>();
 		
+		var prefabLibrary = Container.Resolve<IPrefabLibrary>();
+		var gameObjectPool = new GameObjectPool(prefabLibrary);
+		Container.Bind<GameObjectPool>().FromInstance(gameObjectPool).AsSingle();
+		
 		Debug.Log("Memory pools created and bound to Zenject container");
+	}
+
+	private async UniTask CreateSceneManager()
+	{
+		Debug.Log("Creating SceneManager...");
+		var resourceLoader = Container.Resolve<IResourceLoader>();
+		var sceneManager = new SceneManager(resourceLoader);
+		Container.Bind<SceneManager>().FromInstance(sceneManager).AsSingle();
+		Debug.Log("SceneManager created and bound to Zenject container");
 	}
 
 	private async UniTask CreateMinigameManager()

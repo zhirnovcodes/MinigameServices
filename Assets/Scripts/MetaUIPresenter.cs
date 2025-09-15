@@ -10,7 +10,9 @@ public class MetaUIPresenter : IDisposable
     private readonly IMinigameManager MinigameManager;
     private readonly MinigameConfigModel Config;
     private readonly IPlayerProgressModel PlayerModel;
-    private readonly IPrefabLibrary PrefabLibrary;
+    private readonly MinigameLoadingCurtainPresenter LoadingCurtain;
+    private readonly GameObjectPool Pool;
+    private readonly SceneManager SceneManager;
 
     private int SelectedIndex;
     private List<Transform> CardIcons = new List<Transform>();
@@ -20,18 +22,28 @@ public class MetaUIPresenter : IDisposable
     public MetaUIPresenter(MetaUIView view,
         IMinigameManager minigameManager,
         MinigameConfigModel config,
-        IPlayerProgressModel playerModel, 
-        IPrefabLibrary prefabLibrary)
+        IPlayerProgressModel playerModel,
+        GameObjectPool pool,
+        MinigameLoadingCurtainPresenter loadingCurtain, 
+        SceneManager sceneManager)
     {
         View = view;
         MinigameManager = minigameManager;
         Config = config;
 
-        CreateButtons();
-
-        HandleMinigameButtonClicked(0);
         PlayerModel = playerModel;
-        PrefabLibrary = prefabLibrary;
+        Pool = pool;
+        LoadingCurtain = loadingCurtain;
+        SceneManager = sceneManager;
+    }
+
+    public void Enable()
+    {
+        View.Inject(Pool);
+        View.Enable();
+        CreateButtons();
+        SubscribeToEvents();
+        UpdateResources();
     }
 
     private void CreateButtons()
@@ -40,55 +52,26 @@ public class MetaUIPresenter : IDisposable
         {
             View.AddButton(Config.GetMinigameConfig(i).Name);
         }
-    }
-
-    public void Enable()
-    {
-        View.Enable();
-        SubscribeToEvents();
-        UpdateResources();
-    }
-
-    private void UpdateResources()
-    {
-        View.SetResources(PlayerModel.GetResources().GetDiamonds(), PlayerModel.GetResources().GetCash());
-        DisposeIcons();
-
-        CardData.Clear();
-        PlayerModel.GetResources().GetCharacters(CardData);
-
-        foreach (var card in CardData)
-        {
-            var inst = PrefabLibrary.InstantiatePrefab(GetPrefabID(card.ID));
-            var tr = inst.GetComponent<Transform>();
-            CardIcons.Add(tr);
-        }
-
-        View.SetCards(CardData, CardIcons);
-    }
-
-    private Content.Local.Prefabs.CharacterCards.UI.S128 GetPrefabID(CharacterCards characterCard)
-    {
-        // TODO another way
-        switch (characterCard)
-        {
-            case CharacterCards.Cat:
-                {
-                    return Content.Local.Prefabs.CharacterCards.UI.S128.Cat128;
-                }
-            case CharacterCards.Squid:
-                {
-                    return Content.Local.Prefabs.CharacterCards.UI.S128.Squid128;
-                }
-        }
-
-        throw new NotImplementedException();
+        HandleMinigameButtonClicked(0);
     }
 
     public void Disable()
     {
         View.Disable();
         UnsubscribeFromEvents();
+
+        DisposeIcons();
+    }
+
+    private void UpdateResources()
+    {
+        View.SetResources(PlayerModel.GetResources().GetDiamonds(), PlayerModel.GetResources().GetCash());
+        
+        DisposeIcons();
+
+        PlayerModel.GetResources().GetCharacters(CardData);
+
+        View.SetCards(CardData);
     }
 
     private void SubscribeToEvents()
@@ -134,12 +117,18 @@ public class MetaUIPresenter : IDisposable
     {
         var minigame = Config.GetMinigameConfig(SelectedIndex);
 
-        var s = StartGame(minigame.ID);
+        var _ = StartGame(minigame.ID);
     }
 
     private async UniTaskVoid StartGame(Minigames selectedMinigame)
     {
+        Disable();
+
+        LoadingCurtain.Enable();
+
         var loadSuccess = await MinigameManager.LoadMinigame(selectedMinigame);
+
+        LoadingCurtain.Disable();
 
         if (loadSuccess)
         {
@@ -151,6 +140,18 @@ public class MetaUIPresenter : IDisposable
         }
 
         MinigameManager.DeloadMinigame();
+
+        LoadingCurtain.Enable();
+        await OpenMainScene();
+        LoadingCurtain.Disable();
+
+        Enable();
+    }
+
+    private async UniTask OpenMainScene()
+    {
+        const string mainUiScene = "Assets/Content/Local/Scenes/SampleScene.unity";
+        await SceneManager.LoadScene(mainUiScene);
     }
 
     public void Dispose()
@@ -162,7 +163,7 @@ public class MetaUIPresenter : IDisposable
     {
         foreach(var card in CardIcons)
         {
-            GameObject.Destroy(card.gameObject);
+            Pool.Pop(card.gameObject);
         }
         CardIcons.Clear();
     }

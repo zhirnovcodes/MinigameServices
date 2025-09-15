@@ -1,11 +1,13 @@
 using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using Zenject;
 
 public class MinigameManager : IMinigameManager
 {
-    private readonly IResourceLoader ResourceLoader;
+    private readonly SceneManager SceneManager;
 
     private ILoadingPercentHandler PercentHandler;
     private IMinigameModel MinigameModel;
@@ -21,10 +23,12 @@ public class MinigameManager : IMinigameManager
     private MinigameResultData Result;
 
     private MinigameServices Services;
+    
+    private object CurrentSceneInstance;
 
     [Inject]
     public MinigameManager(
-        IResourceLoader resourceLoader,
+        SceneManager sceneManager,
         ILoadingPercentHandler percentHandler,
         IPlayerProgressModel progress,
         MinigameInputDataMemoryPool inputPool,
@@ -33,7 +37,7 @@ public class MinigameManager : IMinigameManager
         MinigamePenaltyMemoryPool penaltyPool,
         MinigameServices services)
     {
-        ResourceLoader = resourceLoader;
+        SceneManager = sceneManager;
         PercentHandler = percentHandler;
         Progress = progress;
         InputPool = inputPool;
@@ -49,21 +53,19 @@ public class MinigameManager : IMinigameManager
     {
         Debug.Assert(MinigameModel == null, "You forgot to call Deload");
 
-        var loadResult = await ResourceLoader.LoadMinigameScene(minigame, PercentHandler);
+        var loadResult = await SceneManager.LoadMinigameScene(minigame, PercentHandler);
 
-        if (loadResult.Status == ResourceLoadStatus.Fail)
+        if (loadResult == null)
         {
             Debug.LogError($"Failed to load minigame scene: {minigame}");
             return false;
         }
 
-        var currentSceneInstance = loadResult.SuccessData;
+        CurrentSceneInstance = loadResult;
 
-        await currentSceneInstance.ActivateAsync();
+        await SceneManager.OpenScene(CurrentSceneInstance);
 
-        var scene = currentSceneInstance.Scene;
-
-        MinigameModel = FindModelInScene(scene);
+        MinigameModel = SceneManager.FindInScene<IMinigameModel>(CurrentSceneInstance);
 
         if (MinigameModel == null)
         {
@@ -141,9 +143,24 @@ public class MinigameManager : IMinigameManager
         MinigameModel.Dispose();
         MinigameModel = null;
 
-        //DeloadScene();
+        CloseScene();
 
-        //OpenMainScene();
+        DeloadScene();
+    }
+
+    private void CloseScene()
+    {
+    }
+
+    private void DeloadScene()
+    {
+        if (CurrentSceneInstance == null)
+        {
+            return;
+        }
+
+        var _ = SceneManager.DeloadScene(CurrentSceneInstance);
+        CurrentSceneInstance = null;
     }
 
     private void SubscribeEvents()
@@ -202,28 +219,5 @@ public class MinigameManager : IMinigameManager
                 }
             }
         }
-    }
-
-    private IMinigameModel FindModelInScene(Scene scene)
-    {
-        var rootObjects = scene.GetRootGameObjects();
-        
-        foreach (var rootObject in rootObjects)
-        {
-            var minigameModel = rootObject.GetComponent<IMinigameModel>();
-            if (minigameModel != null)
-            {
-                return minigameModel;
-            }
-            
-            // Also check in children
-            minigameModel = rootObject.GetComponentInChildren<IMinigameModel>();
-            if (minigameModel != null)
-            {
-                return minigameModel;
-            }
-        }
-        
-        return null;
     }
 }

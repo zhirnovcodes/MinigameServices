@@ -1326,7 +1326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce103611433050146985325cdd9a7b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Content: {fileID: 8023256576952890160}
+  ContentRoot: {fileID: 8023256576952890160}
   LayoutGroup: {fileID: 457364212482997133}
   CharacterCardLayout: {fileID: 7864002559080398299}
   NameText: {fileID: 8985349982330674007}
@@ -1335,10 +1335,6 @@ MonoBehaviour:
   ClearButton: {fileID: 1304394728953696974}
   DiamondsCount: {fileID: 2010770930757550935}
   CashCount: {fileID: 2825590285703113436}
-  ButtonPrefab: {fileID: 3463868700221098522, guid: 67fba51bf4d52ba48996919df5073f02,
-    type: 3}
-  CardPrefab: {fileID: 1022548324665535695, guid: 67adbd3383d209847bc64da7b3bfc456,
-    type: 3}
 --- !u!1 &8804859796164708770
 GameObject:
   m_ObjectHideFlags: 0

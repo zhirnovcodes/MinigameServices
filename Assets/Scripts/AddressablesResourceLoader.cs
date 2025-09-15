@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 public class AddressablesResourceLoader : IResourceLoader
@@ -71,7 +72,8 @@ public class AddressablesResourceLoader : IResourceLoader
     {
         try
         {
-            var handle = Addressables.LoadSceneAsync(name, LoadSceneMode.Additive);
+            // TODO choose
+            var handle = Addressables.LoadSceneAsync(name, LoadSceneMode.Single);
 
             if (percentHandler == null)
             {
@@ -120,5 +122,10 @@ public class AddressablesResourceLoader : IResourceLoader
                 Status = ResourceLoadStatus.Fail,
             };
         }
+    }
+
+    public async UniTask DeloadScene(SceneInstance handler)
+    {
+        await Addressables.UnloadSceneAsync(handler);
     }
 }
