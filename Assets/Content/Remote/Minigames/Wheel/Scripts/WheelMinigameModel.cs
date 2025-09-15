@@ -8,16 +8,20 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
 
     private MinigameResultData ResultData;
 
-    public void Init(MinigameInputData data, MinigameResultData resultData, IMinigameServices services)
+    public async UniTask Init(MinigameInputData data, MinigameResultData resultData, IMinigameServices services)
     {
         ResultData = resultData;
+
+        await services.GetMinigamePool().PreloadPrefabs<Prefabs>();
     }
 
     public async UniTask StartGame()
     {
         // Wait 2 seconds at the beginning
         await UniTask.Delay(2000);
-        
+
+
+
         ResultData.Reward.Cash = 10;
         ResultData.Reward.Diamonds = 1;
         ResultData.Reward.CharacterCards.Add(new CharacterCardsData
