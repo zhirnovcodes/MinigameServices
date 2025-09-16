@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 7015925261578127195}
-  DepthChange: 2
-  StartRotationSpeed: 360
+  DepthChange: -0.24
+  StartRotationSpeed: 180
   AnimationTime: 3
 --- !u!1 &6046769620103215968
 GameObject:

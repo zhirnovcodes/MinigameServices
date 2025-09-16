@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FlyInTime: 1
   ShowOffTime: 1.5
-  DepthChange: 2
+  DepthChange: -1.25
   Root: {fileID: 4012229504384538523}
 --- !u!1 &2090246737817263832
 GameObject:

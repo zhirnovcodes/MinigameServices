@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 3208615032889681319}
-  DepthChange: 2
+  DepthChange: -1.18
   StartRotationSpeed: 180
   AnimationTime: 3
 --- !u!1 &1487804779584351602

@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
+using Content.Local.Prefabs;
 
 public class WheelMinigameModel : MonoBehaviour, IMinigameModel
 {
@@ -18,18 +19,18 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
 	[SerializeField] private WheelCalibratorModel CalibratorModel;
 	[SerializeField] private WheelTouchHandler Handler;
 
-    private WheelGameRewardModel Rewards;
-    private WheelGamePenaltiesModel Penalties;
+    private WheelGameRewardModel RewardsModel;
+    private WheelGamePenaltiesModel PenaltiesModel;
 
     private IMinigameServices Services;
 
     private WheelGameResultData[] WheelResultData;
+    private WheelMinigameUIPresenter Presenter;
 
     private void ConstructStateMachine()
 	{
-		var uiPresenter = new WheelMinigameUIPresenter(WaitingView, WinView, LoseView);
 		StateMachine.Construct(
-			uiPresenter,
+            Presenter,
 			ManualRotationModel,
 			WheelModel,
 			MotorModel,
@@ -42,6 +43,8 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
         Services = services;
 
         ResultData = resultData;
+
+        Presenter = new WheelMinigameUIPresenter(WaitingView, WinView, LoseView);
 
         await services.GetMinigamePool().PreloadPrefabs<Prefabs>();
 
@@ -57,8 +60,8 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
         var rev = await services.GetConfigLoader().LoadConfig(Configs.RewardsConfig);
         var pen = await services.GetConfigLoader().LoadConfig(Configs.PenaltiesConfig);
 
-        Rewards = new WheelGameRewardModel(rev as WheelGameRewardsConfig);
-        Penalties = new WheelGamePenaltiesModel(pen as WheelGamePenaltiesConfig);
+        RewardsModel = new WheelGameRewardModel(rev as WheelGameRewardsConfig);
+        PenaltiesModel = new WheelGamePenaltiesModel(pen as WheelGamePenaltiesConfig);
     }
 
     private void ConstructWheel(IMinigameServices services)
@@ -76,7 +79,7 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
 
             if (isReward)
             {
-                var reward = Rewards.GetRandomRewardData();
+                var reward = RewardsModel.GetRandomRewardData();
                 var iconRew = services.GetMinigamePool().Pool(reward.Icon);
 
                 iconRew.transform.SetParent(t, false);
@@ -89,7 +92,7 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
                 continue;
             }
 
-            var penalty = Penalties.GetRandomPenalty();
+            var penalty = PenaltiesModel.GetRandomPenalty();
 
             var icon = services.GetMinigamePool().Pool(penalty.Icon);
 
@@ -134,28 +137,96 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
 				ResultData.Penalties.Penalties.Add(penaltyData);
 			}
 		}
-		GameplayFinished(ResultData);
-        /*
-        // Wait 2 seconds at the beginning
-        await UniTask.Delay(2000);
 
-        ResultData.Reward.Cash = 10;
-        ResultData.Reward.Diamonds = 1;
-        ResultData.Reward.CharacterCards.Add(new CharacterCardsData
+		GameplayFinished(ResultData);
+
+        Presenter.EnableFinishView(result);
+
+        if (result.IsSuccess)
         {
-            ID = CharacterCards.Cat,
-            Count = 1
-        });
-        GameplayFinished(ResultData);
-        
-        // Wait 2 seconds at the end
-        await UniTask.Delay(2000);
-        */
+            var pos = Vector3.zero;
+			await UniTask.WhenAll(
+				ShowRewardAnimation(pos, result.Reward),
+				PlayRewardParticles(pos, result.Reward)
+			);
+        }
+    }
+
+
+    private async UniTask ShowRewardAnimation(Vector3 startPosition, WheelGameRewardData result)
+    {
+		var pool = Services.GetCommonObjectPool();
+		GameObject effect = null;
+
+		if (result.Diamonds > 0)
+		{
+			effect = pool.Pool(Effects.GameFinish.Res.Diamond);
+            effect.transform.position = startPosition;
+            await effect.GetComponent<WinRewardAnimation>().PlayAnimation();
+		}
+		else if (result.Cash > 0)
+		{
+			effect = pool.Pool(Effects.GameFinish.Res.Cash);
+            startPosition.y = 0.5f;
+            effect.transform.position = startPosition;
+            await effect.GetComponent<WinRewardAnimation>().PlayAnimation();
+        }
+		else if (result.Cards.Count > 0)
+		{
+			var firstCard = result.Cards.ID;
+			switch (firstCard)
+			{
+				case CharacterCards.Cat:
+					effect = pool.Pool(Effects.GameFinish.CharacterCards.Cat);
+                    effect.transform.position = startPosition + Vector3.up;
+                    await effect.GetComponent<WinCardAnimation>().PlayAnimation();
+                    break;
+				case CharacterCards.Squid:
+					effect = pool.Pool(Effects.GameFinish.CharacterCards.Squid);
+                    effect.transform.position = startPosition + Vector3.up;
+                    await effect.GetComponent<WinCardAnimation>().PlayAnimation();
+                    break;
+			}
+		}
+    }
+
+    private async UniTask PlayRewardParticles(Vector3 position, WheelGameRewardData result)
+    {
+        var pool = Services.GetCommonObjectPool();
+        GameObject go = null;
+
+        if (result.Diamonds > 0)
+        {
+            go = pool.Pool(Effects.Particles.DiamondsRain);
+        }
+        else if (result.Cash > 0)
+        {
+            go = pool.Pool(Effects.Particles.CashFlow);
+        }
+        else if (result.Cards.Count > 0)
+        {
+            go = pool.Pool(Effects.Particles.Victory);
+        }
+
+        if (go == null)
+        {
+            return;
+        }
+
+        go.transform.position = position;
+        var pe = go.GetComponent<ParticlesEffect>();
+        if (pe != null)
+        {
+            pe.Enable();
+            pe.Play();
+            await UniTask.Delay(System.TimeSpan.FromSeconds(pe.GetDuration()));
+            pe.Disable();
+        }
     }
 
     public void Dispose()
     {
         ResultData = null;
         Services.GetMinigamePool().Dispose();
-            }
+    }
 }

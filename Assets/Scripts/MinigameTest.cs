@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 public class MinigameTest : MonoBehaviour
@@ -60,6 +62,7 @@ public class MinigameTest : MonoBehaviour
 
         var resourceLoader = new AddressablesResourceLoader();
         var localPrefabsLibrary = new PrefabLibrary(resourceLoader);
+        await PreloadAllAssets(localPrefabsLibrary);
         var services = new MinigameServices(resourceLoader, localPrefabsLibrary);
         services.SetUp(Minigame);
 
@@ -115,6 +118,30 @@ public class MinigameTest : MonoBehaviour
         }
         
         return string.Join(", ", parts);
+    }
+
+
+    private async UniTask PreloadAllAssets(IPrefabLibrary library)
+    {
+        // Get all enum types from the LocalPrefabs namespace
+        var enumTypes = GetLocalPrefabEnumTypes();
+
+        var loadTasks = new List<UniTask>();
+
+        foreach (var enumType in enumTypes)
+        {
+            loadTasks.Add(library.PreloadPrefabs(enumType));
+        }
+
+        await UniTask.WhenAll(loadTasks);
+    }
+
+    private List<System.Type> GetLocalPrefabEnumTypes()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        return assembly.GetTypes()
+            .Where(t => t.IsEnum && t.Namespace?.StartsWith("Content.Local.Prefabs") == true)
+            .ToList();
     }
 #endif
 }
