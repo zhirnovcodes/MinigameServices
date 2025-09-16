@@ -80,7 +80,7 @@ public class MinigameManager : IMinigameManager
 
         Services.SetUp(minigame);
 
-        MinigameModel.Init(Input, Result, Services);
+        await MinigameModel.Init(Input, Result, Services);
         return true;
     }
 

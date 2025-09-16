@@ -52,19 +52,7 @@ public class PrefabLibrary : IPrefabLibrary
 
     public void Dispose()
     {
-        // Clean up all loaded prefabs
-        foreach (var prefabDictionary in LoadedPrefabs.Values)
-        {
-            foreach (var prefab in prefabDictionary.Values)
-            {
-                if (prefab != null)
-                {
-                    UnityEngine.Object.Destroy(prefab);
-                }
-            }
-        }
-
-        LoadedPrefabs.Clear();
+        Clear();
     }
 
     public async UniTask PreloadPrefabs(Type enumType) 

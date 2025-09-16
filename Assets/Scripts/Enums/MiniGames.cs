@@ -1,5 +1,5 @@
 ﻿public enum Minigames
 {
     Wheel,
-    RandomButton
+    Memory
 }
