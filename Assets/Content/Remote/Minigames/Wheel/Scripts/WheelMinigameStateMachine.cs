@@ -11,16 +11,16 @@ public class WheelMinigameStateMachine : MonoBehaviour
     public async UniTask Play()
     {
         // Wait for spin input
-        await waitState.WaitForSpin();
+       // await waitState.WaitForSpin();
 
         // Start spinning with velocity
         float velocity = 0f; // TODO: Get actual velocity
         await spinningState.StartSpinning(velocity);
 
         // Calibrate the wheel
-        await calibratingState.Calibrate();
+        //await calibratingState.Calibrate();
 
         // Show results
-        await finishState.ShowResults();
+        //await finishState.ShowResults();
     }
 }

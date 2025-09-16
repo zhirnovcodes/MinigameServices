@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7413271700102225594}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 180309050291068152}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 5294484263048091313}
   - component: {fileID: 8910502069050303474}
   - component: {fileID: 222234173904241408}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1527979995994901735}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,7 +247,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1160660746752364889}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3197504504441392111}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 3671554640444584036}
   - component: {fileID: 7719749311629495614}
   - component: {fileID: 4592312744025807455}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 3607852497319384818}
   - component: {fileID: 6970209545788452790}
   - component: {fileID: 5601008057834083748}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -529,7 +529,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7954460781057548280}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -565,7 +565,7 @@ GameObject:
   - component: {fileID: 3298932333862054303}
   - component: {fileID: 7809372777175189493}
   - component: {fileID: 5930531190655342709}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,7 +698,7 @@ GameObject:
   - component: {fileID: 6072969862347999045}
   - component: {fileID: 2372867863444556419}
   - component: {fileID: 1949269012489568285}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,7 +781,7 @@ GameObject:
   - component: {fileID: 8209873373001903509}
   - component: {fileID: 6866584964208066371}
   - component: {fileID: 6984612017068724690}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -864,7 +864,7 @@ GameObject:
   - component: {fileID: 717693973210749891}
   - component: {fileID: 2375654461606481237}
   - component: {fileID: 4784098264246429642}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -949,7 +949,7 @@ GameObject:
   - component: {fileID: 17589919010418486}
   - component: {fileID: 4614997069655155861}
   - component: {fileID: 4891347422019526149}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 5051064630283594158}
   - component: {fileID: 1582762424972174896}
   - component: {fileID: 3003983864052059497}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1215,7 +1215,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9113517074765366819}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1251,7 +1251,7 @@ GameObject:
   - component: {fileID: 1768729637402073408}
   - component: {fileID: 9125472067210698040}
   - component: {fileID: 5461481699207581899}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1386,7 +1386,7 @@ GameObject:
   - component: {fileID: 2564590314046110978}
   - component: {fileID: 2172816968382956914}
   - component: {fileID: 6047481472961615625}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wheel (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1470,7 +1470,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1501,14 +1501,14 @@ HingeJoint:
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0.1, z: 0}
   serializedVersion: 2
-  m_UseSpring: 0
+  m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 0
+    spring: 10
+    damper: 1
     targetPosition: 0
   m_UseMotor: 1
   m_Motor:
-    targetVelocity: 10
+    targetVelocity: 0
     force: 1
     freeSpin: 0
   m_UseLimits: 0
@@ -1537,7 +1537,7 @@ GameObject:
   - component: {fileID: 5786016455602407706}
   - component: {fileID: 6224200454367996896}
   - component: {fileID: 3885386526269936139}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1618,7 +1618,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7930948425826096212}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1650,7 +1650,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7465272889347890128}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Placeholder_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1682,7 +1682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5538814701523340909}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pegs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1898,7 +1898,7 @@ GameObject:
   - component: {fileID: 841412994449487425}
   - component: {fileID: 3556838339999923510}
   - component: {fileID: 8252481271122476753}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2033,7 +2033,7 @@ GameObject:
   - component: {fileID: 4187290632943294595}
   - component: {fileID: 3190420415578300148}
   - component: {fileID: 4143378801422162274}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peg_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2166,7 +2166,7 @@ GameObject:
   - component: {fileID: 4781043426700440518}
   - component: {fileID: 7604101168526375321}
   - component: {fileID: 8475351779520007932}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2249,7 +2249,7 @@ GameObject:
   - component: {fileID: 2114467093944644277}
   - component: {fileID: 8782458789601381242}
   - component: {fileID: 392908394573768987}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2332,7 +2332,10 @@ GameObject:
   - component: {fileID: 204806379631198040}
   - component: {fileID: 6374124651867565163}
   - component: {fileID: 2943457209716191792}
-  m_Layer: 0
+  - component: {fileID: 3819723017719305642}
+  - component: {fileID: 775982034027839141}
+  - component: {fileID: 5094386563001824812}
+  m_Layer: 6
   m_Name: Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2388,6 +2391,62 @@ MonoBehaviour:
   Clicker: {fileID: 204806379631198040}
   Wheel: {fileID: 2693495853683690438}
   index: 0
+  index0: 0
+  index1: 0
+  dot0: 0
+  dot1: 0
+--- !u!114 &3819723017719305642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9161099022995666586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d0368cc62ab944c8ec87943efdcd0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxAngVelocityDeg: 30
+  Rigidbody: {fileID: 2172816968382956914}
+  Handler: {fileID: 5094386563001824812}
+--- !u!135 &775982034027839141
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9161099022995666586}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5094386563001824812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9161099022995666586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f680a987b465ec4db56c6e4e0902e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxSwipeSpeed: 10
+  WheelLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &9174125712112362185
 GameObject:
   m_ObjectHideFlags: 0
@@ -2399,7 +2458,7 @@ GameObject:
   - component: {fileID: 3851451564147516023}
   - component: {fileID: 6436041629720191562}
   - component: {fileID: 1590274971393553158}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}

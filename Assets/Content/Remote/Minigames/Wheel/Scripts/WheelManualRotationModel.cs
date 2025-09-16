@@ -4,33 +4,47 @@ public interface IWheelManualRotationModel
 {
     void Enable();
     void Disable();
-    float GetAngularSpeed();
-    void AddAngularForce();
 }
 
 public class WheelManualRotationModel : MonoBehaviour, IWheelManualRotationModel
 {
-    public Rigidbody rigidbody;
+    public float MaxAngVelocityDeg = 30;
+    public Rigidbody Rigidbody;
+    public WheelTouchHandler Handler;
 
     public void Enable()
     {
         enabled = true;
+        Handler.enabled = true;
     }
 
     public void Disable()
     {
         enabled = false;
+        Handler.enabled = false;
     }
 
     public float GetAngularSpeed()
     {
-        return rigidbody.angularVelocity.magnitude;
+        return Rigidbody.angularVelocity.y;
     }
 
-    public void AddAngularForce()
+    private void FixedUpdate()
     {
-        Vector3 angularVelocity = rigidbody.angularVelocity;
-        angularVelocity.y += 1f; // Add some angular velocity
-        rigidbody.angularVelocity = angularVelocity;
+        if (Handler.GetIsTouchingWheel() == false)
+        {
+            return;
+        }
+
+        var x = Handler.GetTouchDirection().x;
+
+        if (x <= 0)
+        {
+            return;
+        }
+
+        Vector3 angularVelocity = Rigidbody.angularVelocity;
+        angularVelocity.y = - x * MaxAngVelocityDeg * Mathf.Deg2Rad; // Add some angular velocity
+        Rigidbody.angularVelocity = angularVelocity;
     }
 }
