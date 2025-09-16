@@ -98,7 +98,7 @@ public class BoardModel : MonoBehaviour, IDisposable
                 Blocks.Add(blockModel);
             }
         }
-        /*
+
         // Shuffle blocks and results
         for (int i = 0; i < Blocks.Count; i++)
         {
@@ -108,16 +108,6 @@ public class BoardModel : MonoBehaviour, IDisposable
             Vector3 tempPosition = Blocks[i].transform.position;
             Blocks[i].transform.position = Blocks[randomIndex].transform.position;
             Blocks[randomIndex].transform.position = tempPosition;
-            
-            // Swap blocks in list
-            var tempBlock = Blocks[i];
-            Blocks[i] = Blocks[randomIndex];
-            Blocks[randomIndex] = tempBlock;
-        }*/
-
-        for (int i = 0; i < Blocks.Count; i++)
-        {
-            //Blocks[i].SetIndex(i);
         }
     }
 
