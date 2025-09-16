@@ -5,6 +5,7 @@ using UnityEngine;
 // WheelMaker: Attach to any GameObject. Configure references and click Build in the inspector.
 public class WheelMaker : MonoBehaviour
 {
+#if UNITY_EDITOR
 	public GameObject Root;
 	public GameObject Wheel;
 	public GameObject Peg;
@@ -45,9 +46,6 @@ public class WheelMaker : MonoBehaviour
 			Quaternion placeholderRot = Quaternion.LookRotation(midDir, Vector3.up);
 			CreateChildFromPrefab(PlaceholderPrefab, placeholdersRoot, $"Placeholder_{i}", placeholderPos, placeholderRot);
 		}
-
-		EditorUtility.SetDirty(Wheel);
-		EditorUtility.SetDirty(gameObject);
 	}
 
 	static Transform EnsureChild(Transform parent, string childName)
@@ -55,7 +53,6 @@ public class WheelMaker : MonoBehaviour
 		Transform existing = parent.Find(childName);
 		if (existing != null) return existing;
 		GameObject go = new GameObject(childName);
-		Undo.RegisterCreatedObjectUndo(go, "Create WheelMaker child");
 		go.transform.SetParent(parent, false);
 		go.transform.localPosition = Vector3.zero;
 		go.transform.localRotation = Quaternion.identity;
@@ -68,7 +65,6 @@ public class WheelMaker : MonoBehaviour
 		for (int i = parent.childCount - 1; i >= 0; i--)
 		{
 			Transform child = parent.GetChild(i);
-			Undo.DestroyObjectImmediate(child.gameObject);
 		}
 	}
 
@@ -79,7 +75,6 @@ public class WheelMaker : MonoBehaviour
 		{
 			// Fallback for non-prefab assets
 			instance = Object.Instantiate(prefab, parent);
-			Undo.RegisterCreatedObjectUndo(instance, "Instantiate object");
 		}
 		instance.transform.SetParent(parent, false);
 		instance.name = name;
@@ -127,6 +122,7 @@ public class WheelMaker : MonoBehaviour
 		}
 		return Mathf.Max(0f, radius);
 	}
+#endif
 }
 
 

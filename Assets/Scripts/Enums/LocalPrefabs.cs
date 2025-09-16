@@ -8,6 +8,21 @@ namespace Content.Local.Prefabs
             DiamondsRain,
             Victory
         }
+
+        public static class GameFinish
+        {
+            public enum Res
+            {
+                Diamond,
+                Cash
+            }
+
+            public enum CharacterCards
+            {
+                Cat,
+                Squid
+            }
+        }
     }
 
     public static class UI

@@ -11,20 +11,22 @@ public interface IWheelModel
 public class WheelModel : MonoBehaviour, IWheelModel
 {
     public List<Transform> placeholders = new List<Transform>();
-    public Transform Clicker;
+    public Transform ClickerPointer;
     public Transform Wheel;
 
     public int index;
     public int index0;
     public int index1;
+    public int index2;
     public float dot0;
     public float dot1;
+    public float dot2;
     public int GetCurrentSectionId()
     {
         float sectionAngle = (360f / placeholders.Count);
 
         // Get wheel Y rotation and calculate approximate index
-        float wheelYRotation = Wheel.eulerAngles.y;
+        float wheelYRotation = Wheel.localRotation.eulerAngles.y;
         
         // Normalize angle to 0-360 range
         wheelYRotation = wheelYRotation % 360f;
@@ -33,31 +35,54 @@ public class WheelModel : MonoBehaviour, IWheelModel
         float approximateIndex = (wheelYRotation - sectionAngle / 2f) / sectionAngle;
         
         // Round up to get the upper index
-        int upperIndex = Mathf.CeilToInt(approximateIndex);
-        int lowerIndex = upperIndex - 1;
+        int firstIndex = Mathf.CeilToInt(approximateIndex);
+        int secondIndex = firstIndex + 1;
+        int thirdIndex = firstIndex - 1;
         
         // Ensure indices are within valid range
-        upperIndex = upperIndex % placeholders.Count;
-        lowerIndex = lowerIndex % placeholders.Count;
-        if (lowerIndex < 0)
-            lowerIndex += placeholders.Count;
+        firstIndex = firstIndex % placeholders.Count;
+        secondIndex = secondIndex % placeholders.Count;
+        thirdIndex = thirdIndex % placeholders.Count;
+        if (secondIndex < 0)
+            secondIndex += placeholders.Count;
+        if (thirdIndex < 0)
+            thirdIndex += placeholders.Count;
         
-        // Get clicker direction
-        Vector3 clickerDirection = Clicker.forward;
+        // Compare angles from wheel center to placeholder vs ClickerPointer
+        Vector3 center = Wheel.position;
+        Vector3 clickerDirection = (ClickerPointer.position - center).normalized;
         
-        // Calculate dot products for both placeholders
-        Vector3 upperPlaceholderDirection = (placeholders[upperIndex].position - Clicker.position).normalized;
-        Vector3 lowerPlaceholderDirection = (placeholders[lowerIndex].position - Clicker.position).normalized;
+        Vector3 firstPlaceholderDirection = (placeholders[firstIndex].position - center).normalized;
+        Vector3 secondPlaceholderDirection = (placeholders[secondIndex].position - center).normalized;
+        Vector3 thirdPlaceholderDirection = (placeholders[thirdIndex].position - center).normalized;
         
-        float upperDotProduct = Vector3.Dot(upperPlaceholderDirection, clickerDirection);
-        float lowerDotProduct = Vector3.Dot(lowerPlaceholderDirection, clickerDirection);
+        float firstAngle = Vector3.Angle(firstPlaceholderDirection, clickerDirection);
+        float secondAngle = Vector3.Angle(secondPlaceholderDirection, clickerDirection);
+        float thirdAngle = Vector3.Angle(thirdPlaceholderDirection, clickerDirection);
+        
+        // Also keep dot products for debugging/inspection
+        float firstDotProduct = Vector3.Dot(firstPlaceholderDirection, clickerDirection);
+        float secondDotProduct = Vector3.Dot(secondPlaceholderDirection, clickerDirection);
+        float thirdDotProduct = Vector3.Dot(thirdPlaceholderDirection, clickerDirection);
 
-        // Return the index with positive dot product
-        index0 = upperIndex;
-        index1 = lowerIndex;
-        dot0 = upperDotProduct;
-        dot1 = lowerDotProduct;
-        return upperIndex;
+        index0 = firstIndex;
+        index1 = secondIndex;
+        index2 = thirdIndex;
+        dot0 = firstDotProduct;
+        dot1 = secondDotProduct;
+        dot2 = thirdDotProduct;
+        int resultIndex = firstIndex;
+        float minAngle = firstAngle;
+        if (secondAngle < minAngle)
+        {
+            resultIndex = secondIndex;
+            minAngle = secondAngle;
+        }
+        if (thirdAngle < minAngle)
+        {
+            resultIndex = thirdIndex;
+        }
+        return resultIndex;
     }
 
     public int GetSectionsCount()

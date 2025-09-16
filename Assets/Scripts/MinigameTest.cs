@@ -10,6 +10,7 @@ public class MinigameTest : MonoBehaviour
     public int PlayerCash = 10;
     public int PlayerDiamonds = 1;
     public List<CharacterCardsData> PlayerCards;
+    public Minigames Minigame;
     
     private IMinigameModel Model;
 
@@ -60,10 +61,11 @@ public class MinigameTest : MonoBehaviour
         var resourceLoader = new AddressablesResourceLoader();
         var localPrefabsLibrary = new PrefabLibrary(resourceLoader);
         var services = new MinigameServices(resourceLoader, localPrefabsLibrary);
+        services.SetUp(Minigame);
 
         Model.GameplayFinished += HandleGameplayFinished;
 
-        Model.Init(input, resultData, services);
+        await Model.Init(input, resultData, services);
         
         Debug.Log("Starting game");
 

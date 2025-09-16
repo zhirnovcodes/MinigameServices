@@ -8,17 +8,28 @@ public class WheelMinigameStateMachine : MonoBehaviour
     [SerializeField] private WheelMinigameCalibratingState calibratingState;
     [SerializeField] private WheelMinigameFinishState finishState;
 
+    public void Construct(
+        WheelMinigameUIPresenter uiPresenter,
+        IWheelManualRotationModel manualRotationModel,
+        IWheelModel wheelModel,
+        IWheelMotorModel motorModel,
+        IWheelCalibratorModel calibratorModel,
+        WheelTouchHandler handler)
+    {
+        waitState.Construct(uiPresenter, manualRotationModel, wheelModel, handler);
+        
+        spinningState.Construct(manualRotationModel, motorModel);
+        
+        calibratingState.Construct(calibratorModel);
+    }
+
     public async UniTask Play()
     {
-        // Wait for spin input
-       // await waitState.WaitForSpin();
+        await waitState.WaitForSpin();
 
-        // Start spinning with velocity
-        float velocity = 0f; // TODO: Get actual velocity
-        await spinningState.StartSpinning(velocity);
+        await spinningState.StartSpinning();
 
-        // Calibrate the wheel
-        //await calibratingState.Calibrate();
+        await calibratingState.Calibrate();
 
         // Show results
         //await finishState.ShowResults();

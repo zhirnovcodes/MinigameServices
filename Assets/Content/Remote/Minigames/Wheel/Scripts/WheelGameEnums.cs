@@ -13,3 +13,4 @@ public enum WheelGamePenaltyResource
 	Diamonds = 0,
 	Cash = 1
 }
+

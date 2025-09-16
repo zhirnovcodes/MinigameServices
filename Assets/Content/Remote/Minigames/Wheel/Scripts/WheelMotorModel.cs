@@ -7,6 +7,7 @@ public interface IWheelMotorModel
     void SetMotorForce(float force);
     void Enable();
     void Disable();
+    void ForceStop();
 }
 
 public class WheelMotorModel : MonoBehaviour, IWheelMotorModel
@@ -40,5 +41,14 @@ public class WheelMotorModel : MonoBehaviour, IWheelMotorModel
     public void Disable()
     {
         enabled = false;
+    }
+
+    public void ForceStop()
+    {
+        JointMotor motor = hingeJoint.motor;
+        motor.force = 50;
+        motor.targetVelocity = 0;
+        hingeJoint.motor = motor;
+        hingeJoint.useMotor = false;
     }
 }
