@@ -27,16 +27,6 @@ public class GameplayDataModel
         return Data.SelectedIndex1.HasValue && Data.SelectedIndex2.HasValue && Data.SelectedIndex1.Value == Data.SelectedIndex2.Value;
     }
 
-    public BlockData GetBlockData(int index)
-    {
-        return Data.Blocks[index];
-    }
-
-    public int GetBlocksCount()
-    {
-        return Data.Blocks.Count;
-    }
-
     public void SetFirstSelected(int index)
     {
         Data.SelectedIndex1 = index;
@@ -51,6 +41,16 @@ public class GameplayDataModel
     {
         Data.SelectedIndex1 = null;
         Data.SelectedIndex2 = null;
+    }
+
+    public int? GetFirstSelectedIndex()
+    {
+        return Data.SelectedIndex1;
+    }
+
+    public int? GetSecondSelectedIndex()
+    {
+        return Data.SelectedIndex2;
     }
 }
 

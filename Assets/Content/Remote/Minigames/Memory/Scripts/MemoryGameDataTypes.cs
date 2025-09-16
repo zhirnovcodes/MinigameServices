@@ -12,7 +12,6 @@ public class GameplayData
 {
     public int? SelectedIndex1;
     public int? SelectedIndex2;
-    public List<BlockData> Blocks = new List<BlockData>();
 }
 
 

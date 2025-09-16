@@ -1,12 +1,12 @@
-using UnityEngine;
-
 public class MemoryGameConfigModel
 {
     readonly MemoryGameRewardsConfig rewardsConfig;
+    readonly MemoryGamePenaltiesConfig penaltiesConfig;
 
-    public MemoryGameConfigModel(MemoryGameRewardsConfig rewardsConfig)
+    public MemoryGameConfigModel(MemoryGameRewardsConfig rewardsConfig, MemoryGamePenaltiesConfig penaltiesConfig) 
     {
         this.rewardsConfig = rewardsConfig;
+        this.penaltiesConfig = penaltiesConfig;
     }
 
     public MemoryGameRewardData GetRewardData(int index)
@@ -14,19 +14,9 @@ public class MemoryGameConfigModel
         return rewardsConfig.Rewards[index];
     }
 
-    public int GetCount()
+    public int GetRewardsCount()
     {
         return rewardsConfig.Rewards.Length;
-    }
-}
-
-public class MemoryGamePenaltiesModel
-{
-    readonly MemoryGamePenaltiesConfig penaltiesConfig;
-
-    public MemoryGamePenaltiesModel(MemoryGamePenaltiesConfig penaltiesConfig)
-    {
-        this.penaltiesConfig = penaltiesConfig;
     }
 
     public MemoryGamePenaltyData GetPenalty(int index)
@@ -34,7 +24,7 @@ public class MemoryGamePenaltiesModel
         return penaltiesConfig.Penalties[index];
     }
 
-    public int GetCount()
+    public int GetPenaltiesCount()
     {
         return penaltiesConfig.Penalties.Length;
     }

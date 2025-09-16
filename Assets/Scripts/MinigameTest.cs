@@ -13,12 +13,13 @@ public class MinigameTest : MonoBehaviour
     public int PlayerDiamonds = 1;
     public List<CharacterCardsData> PlayerCards;
     public Minigames Minigame;
+    public GameObject ModelObject;
     
     private IMinigameModel Model;
 
     private void Start()
     {
-        Model = GetComponent<IMinigameModel>();
+        Model = ModelObject.GetComponent<IMinigameModel>();
     }
 
     private void Update()

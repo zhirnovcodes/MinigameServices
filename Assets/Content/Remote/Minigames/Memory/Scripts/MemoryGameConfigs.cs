@@ -11,5 +11,3 @@ public class MemoryGamePenaltiesConfig : ScriptableObject
 {
     public MemoryGamePenaltyData[] Penalties;
 }
-
-

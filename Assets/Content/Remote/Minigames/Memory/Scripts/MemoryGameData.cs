@@ -12,6 +12,7 @@ public struct MemoryGamePenaltyData
     public MemoryGamePenaltyType Penalty;
     public MemoryGamePenaltyResource Resource;
     public int Amount;
+    public Icons Icon;
 }
 
 [System.Serializable]
@@ -21,6 +22,7 @@ public struct MemoryGameResultData
     public bool IsTimeout;
     public MemoryGameRewardData Reward;
     public MemoryGamePenaltyData Penalty;
+    public Icons Icon;
 }
 
 

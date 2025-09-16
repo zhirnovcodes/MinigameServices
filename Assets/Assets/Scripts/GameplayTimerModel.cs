@@ -6,6 +6,7 @@ public interface IGameplayTimerModel
     event Action TimerTicked;
     void SetDuration(float duration);
     bool GetIsTimeUp();
+    float GetTime();
     void Run();
 }
 
@@ -51,6 +52,11 @@ public class GameplayTimerModel : MonoBehaviour, IGameplayTimerModel
 
         TimeElapsed += Time.deltaTime;
 	}
+
+    public float GetTime()
+    {
+        return DurationSeconds - TimeElapsed;
+    }
 }
 
 
