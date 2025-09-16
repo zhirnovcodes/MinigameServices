@@ -10,8 +10,8 @@ public struct BlockData
 
 public class GameplayData
 {
-    public int? SelectedIndex1;
-    public int? SelectedIndex2;
+    public int? SelectedId1;
+    public int? SelectedId2;
 }
 
 

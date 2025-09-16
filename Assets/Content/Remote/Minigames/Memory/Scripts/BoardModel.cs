@@ -9,7 +9,6 @@ public class BoardModel : MonoBehaviour, IDisposable
     [SerializeField] private Grid Grid;
     
     private List<MemoryGameBlockModel> Blocks = new List<MemoryGameBlockModel>();
-    private List<MemoryGameResultData> Results = new List<MemoryGameResultData>();
 
     private IMinigameGameObjectPool Pool;
     private MemoryGameConfigModel Config;
@@ -33,9 +32,11 @@ public class BoardModel : MonoBehaviour, IDisposable
         int rewardCount = Mathf.RoundToInt(totalPairs * 0.8f); // 80% rewards
         int penaltyCount = totalPairs - rewardCount; // 20% penalties
 
+        var results = new List<MemoryGameResultData>();
+
         for (int i = 0; i < rewardCount; i++)
         {
-            Results.Add( new MemoryGameResultData
+            results.Add( new MemoryGameResultData
             {
                 IsSuccess = true,
                 Reward = Config.GetRewardData(i)
@@ -44,7 +45,7 @@ public class BoardModel : MonoBehaviour, IDisposable
         
         for (int i = 0; i < penaltyCount; i++)
         {
-            Results.Add( new MemoryGameResultData
+            results.Add( new MemoryGameResultData
             {
                 IsSuccess = false,
                 Penalty = Config.GetPenalty(i)
@@ -79,10 +80,11 @@ public class BoardModel : MonoBehaviour, IDisposable
                 var blockModel = blockGO.GetComponent<MemoryGameBlockModel>();
 
                 // Get icon type based on result index
-                var iconType = Results[pairIndex].Icon;
+                var data = results[pairIndex];
+                var icon = data.IsSuccess ? data.Reward.Icon : data.Penalty.Icon;
 
                 // Spawn icon from pool
-                var iconGO = Pool.Instantiate(iconType);
+                var iconGO = Pool.Instantiate(icon);
                 var placeholder = blockModel.GetPlaceholder();
                 iconGO.transform.SetParent(placeholder, false);
                 
@@ -91,10 +93,12 @@ public class BoardModel : MonoBehaviour, IDisposable
                 Vector3 worldPosition = Grid.CellToWorld(gridPosition3D) + boardCenterOffset;
                 blockGO.transform.position = worldPosition;
                 blockModel.SetTurnedHidden();
+                blockModel.SetResultData(data);
+                blockModel.SetIndex(positionIndex);
                 Blocks.Add(blockModel);
             }
         }
-
+        /*
         // Shuffle blocks and results
         for (int i = 0; i < Blocks.Count; i++)
         {
@@ -109,23 +113,17 @@ public class BoardModel : MonoBehaviour, IDisposable
             var tempBlock = Blocks[i];
             Blocks[i] = Blocks[randomIndex];
             Blocks[randomIndex] = tempBlock;
+        }*/
 
-            var tempResult = Results[i];
-            Results[i] = Results[randomIndex];
-            Results[randomIndex] = tempResult;
-
-            Blocks[i].SetIndex(i);
+        for (int i = 0; i < Blocks.Count; i++)
+        {
+            //Blocks[i].SetIndex(i);
         }
     }
 
     public MemoryGameBlockModel GetBlock(int index)
     {
         return Blocks[index];
-    }
-
-    public MemoryGameResultData GetBlockData(int index)
-    {
-        return Results[index];
     }
 
     public int GetBlocksCount()

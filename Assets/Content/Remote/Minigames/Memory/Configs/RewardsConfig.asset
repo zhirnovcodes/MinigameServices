@@ -13,31 +13,27 @@ MonoBehaviour:
   m_Name: RewardsConfig
   m_EditorClassIdentifier: 
   Rewards:
-  - Reward:
-      Cash: 100
-      Diamonds: 0
-      Cards:
-        ID: 0
-        Count: 0
+  - Cash: 100
+    Diamonds: 0
+    Cards:
+      ID: 0
+      Count: 0
     Icon: 2
-  - Reward:
-      Cash: 0
-      Diamonds: 5
-      Cards:
-        ID: 0
-        Count: 0
+  - Cash: 0
+    Diamonds: 5
+    Cards:
+      ID: 0
+      Count: 0
     Icon: 1
-  - Reward:
-      Cash: 0
-      Diamonds: 0
-      Cards:
-        ID: 0
-        Count: 1
+  - Cash: 0
+    Diamonds: 0
+    Cards:
+      ID: 0
+      Count: 1
     Icon: 5
-  - Reward:
-      Cash: 0
-      Diamonds: 0
-      Cards:
-        ID: 1
-        Count: 1
+  - Cash: 0
+    Diamonds: 0
+    Cards:
+      ID: 1
+      Count: 1
     Icon: 6

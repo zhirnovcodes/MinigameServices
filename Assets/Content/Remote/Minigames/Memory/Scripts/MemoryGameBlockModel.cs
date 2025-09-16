@@ -13,6 +13,7 @@ public class MemoryGameBlockModel : MonoBehaviour
 
     private Tweener flipShowTween;
     private Tweener flipHideTween;
+    private MemoryGameResultData Result;
 
     private void Awake()
     {
@@ -31,6 +32,16 @@ public class MemoryGameBlockModel : MonoBehaviour
     public void SetIndex(int index)
     {
         Index = index;
+    }
+
+    public void SetResultData(MemoryGameResultData result)
+    {
+        Result = result;
+    }
+
+    public MemoryGameResultData GetResultData()
+    {
+        return Result;
     }
 
     public void SetInteractive()

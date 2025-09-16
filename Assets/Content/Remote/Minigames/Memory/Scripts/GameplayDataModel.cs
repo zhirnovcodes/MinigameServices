@@ -9,48 +9,43 @@ public class GameplayDataModel
 
     public bool IsFirstSelected()
     {
-        return Data.SelectedIndex1.HasValue;
+        return Data.SelectedId1.HasValue;
     }
 
     public bool IsSecondSelected()
     {
-        return Data.SelectedIndex2.HasValue;
+        return Data.SelectedId2.HasValue;
     }
 
     public bool IsBothSelected()
     {
-        return Data.SelectedIndex1.HasValue && Data.SelectedIndex2.HasValue;
-    }
-
-    public bool IsSameSelected()
-    {
-        return Data.SelectedIndex1.HasValue && Data.SelectedIndex2.HasValue && Data.SelectedIndex1.Value == Data.SelectedIndex2.Value;
+        return Data.SelectedId1.HasValue && Data.SelectedId2.HasValue;
     }
 
     public void SetFirstSelected(int index)
     {
-        Data.SelectedIndex1 = index;
+        Data.SelectedId1 = index;
     }
 
     public void SetSecondSelected(int index)
     {
-        Data.SelectedIndex2 = index;
+        Data.SelectedId2 = index;
     }
 
     public void DeselectAll()
     {
-        Data.SelectedIndex1 = null;
-        Data.SelectedIndex2 = null;
+        Data.SelectedId1 = null;
+        Data.SelectedId2 = null;
     }
 
     public int? GetFirstSelectedIndex()
     {
-        return Data.SelectedIndex1;
+        return Data.SelectedId1;
     }
 
     public int? GetSecondSelectedIndex()
     {
-        return Data.SelectedIndex2;
+        return Data.SelectedId2;
     }
 }
 

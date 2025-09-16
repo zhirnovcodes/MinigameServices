@@ -13,18 +13,15 @@ MonoBehaviour:
   m_Name: PenaltiesConfig
   m_EditorClassIdentifier: Assembly-CSharp::MemoryGamePenaltiesConfig
   Penalties:
-  - Penalty:
-      Penalty: 0
-      Resource: 0
-      Amount: 0
+  - Penalty: 0
+    Resource: 0
+    Amount: 0
     Icon: 0
-  - Penalty:
-      Penalty: 1
-      Resource: 0
-      Amount: 0
+  - Penalty: 1
+    Resource: 0
+    Amount: 0
     Icon: 3
-  - Penalty:
-      Penalty: 1
-      Resource: 1
-      Amount: 0
+  - Penalty: 1
+    Resource: 1
+    Amount: 0
     Icon: 4

@@ -51,11 +51,11 @@ public class MemoryMinigameModel : MonoBehaviour, IMinigameModel
         GameplayUIPresenter = new GameplayUIPresenter(StartUiView, ResultView);
 
         // Create states
-        CheckResultState = new CheckResultState(Board, GameplayDataModel, null);
-        WaitForInputState = new WaitForInputState(Board, GameplayDataModel, TimerModel, CheckResultState);
+        CheckResultState = new CheckResultState(Board, GameplayDataModel);
+        WaitForInputState = new WaitForInputState(Board, GameplayDataModel, TimerModel);
 
-        // Set up circular reference for CheckResultState
-        CheckResultState = new CheckResultState(Board, GameplayDataModel, WaitForInputState);
+        CheckResultState.InjectState(WaitForInputState);
+        WaitForInputState.InjectState(CheckResultState);
     }
 
     public async UniTask StartGame()

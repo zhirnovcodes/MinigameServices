@@ -17,35 +17,26 @@ public class GameplayResultView : MonoBehaviour
     
     public async UniTask PlayRewardAnimation()
     {
-        if (RewardAnimation != null)
-        {
-            RewardAnimation.SetActive(true);
-            // Play reward animation (e.g., confetti, coins, etc.)
-            await UniTask.Delay(2000); // Simulate animation duration
-            RewardAnimation.SetActive(false);
-        }
+        RewardAnimation.SetActive(true);
+        // Play reward animation (e.g., confetti, coins, etc.)
+        await UniTask.Delay(2000); // Simulate animation duration
+        RewardAnimation.SetActive(false);
     }
     
     public async UniTask PlayPenaltyAnimation()
     {
-        if (PenaltyAnimation != null)
-        {
-            PenaltyAnimation.SetActive(true);
-            // Play penalty animation (e.g., red flash, negative effects, etc.)
-            await UniTask.Delay(1500); // Simulate animation duration
-            PenaltyAnimation.SetActive(false);
-        }
+        PenaltyAnimation.SetActive(true);
+        // Play penalty animation (e.g., red flash, negative effects, etc.)
+        await UniTask.Delay(1500); // Simulate animation duration
+        PenaltyAnimation.SetActive(false);
     }
     
     public async UniTask PlayTimeIsUpAnimation()
     {
-        if (TimeIsUpAnimation != null)
-        {
-            TimeIsUpAnimation.SetActive(true);
-            // Play time's up animation (e.g., clock animation, warning, etc.)
-            await UniTask.Delay(2000); // Simulate animation duration
-            TimeIsUpAnimation.SetActive(false);
-        }
+        TimeIsUpAnimation.SetActive(true);
+        // Play time's up animation (e.g., clock animation, warning, etc.)
+        await UniTask.Delay(2000); // Simulate animation duration
+        TimeIsUpAnimation.SetActive(false);
     }
     
     public void Enable()

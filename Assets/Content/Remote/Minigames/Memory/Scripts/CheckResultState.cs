@@ -4,15 +4,19 @@ public class CheckResultState
 {
     private readonly BoardModel BoardModel;
     private readonly GameplayDataModel GameplayDataModel;
-    private readonly WaitForInputState WaitForInputState;
+    private WaitForInputState WaitForInputState;
 
     public CheckResultState(
         BoardModel boardModel,
-        GameplayDataModel gameplayDataModel,
-        WaitForInputState waitForInputState)
+        GameplayDataModel gameplayDataModel
+        )
     {
         BoardModel = boardModel;
         GameplayDataModel = gameplayDataModel;
+    }
+
+    public void InjectState(WaitForInputState waitForInputState)
+    {
         WaitForInputState = waitForInputState;
     }
 
@@ -23,7 +27,7 @@ public class CheckResultState
         await UniTask.WaitForSeconds(0.5f);
 
         // Check if both selected blocks are the same
-        if (GameplayDataModel.IsSameSelected())
+        if (IsSameSelected())
         {
             return CreateResult();
         }
@@ -36,6 +40,20 @@ public class CheckResultState
             
         // Go back to wait for input
         return await WaitForInputState.Play();
+    }
+
+    private bool IsSameSelected()
+    {
+        var id1 = GameplayDataModel.GetFirstSelectedIndex().Value;
+        var id2 = GameplayDataModel.GetSecondSelectedIndex().Value;
+
+        var data1 = BoardModel.GetBlock(id1).GetResultData();
+        var data2 = BoardModel.GetBlock(id2).GetResultData();
+
+        var icon1 = data1.IsSuccess ? data1.Reward.Icon : data1.Penalty.Icon;
+        var icon2 = data2.IsSuccess ? data2.Reward.Icon : data2.Penalty.Icon;
+
+        return icon1 == icon2;
     }
 
     private async UniTask FlipBothSelected()
@@ -61,7 +79,7 @@ public class CheckResultState
     private MemoryGameResultData CreateResult()
     {
         var index = GameplayDataModel.GetFirstSelectedIndex().Value;
-        var data = BoardModel.GetBlockData(index);
+        var data = BoardModel.GetBlock(index).GetResultData();
 
         return data;
     }

@@ -7,18 +7,21 @@ public class WaitForInputState
     private readonly BoardModel BoardModel;
     private readonly GameplayDataModel GameplayDataModel;
     private readonly IGameplayTimerModel GameplayTimerModel;
-    private readonly CheckResultState CheckResultState;
+    private CheckResultState CheckResultState;
 
     public WaitForInputState(
         BoardModel boardModel,
         GameplayDataModel gameplayDataModel,
-        IGameplayTimerModel gameplayTimerModel,
-        CheckResultState checkResultState)
+        IGameplayTimerModel gameplayTimerModel)
     {
         BoardModel = boardModel;
         GameplayDataModel = gameplayDataModel;
         GameplayTimerModel = gameplayTimerModel;
-        CheckResultState = checkResultState;
+    }
+
+    public void InjectState(CheckResultState state)
+    {
+        CheckResultState = state;
     }
 
     public async UniTask<MemoryGameResultData> Play()
@@ -54,7 +57,7 @@ public class WaitForInputState
         }
         else
         {
-            return await CheckResultState.Play();
+            return await CheckResultState.Play();   
         }
     }
 
@@ -79,7 +82,8 @@ public class WaitForInputState
     private void HandleButtonClicked(int index)
     {
         var block = BoardModel.GetBlock(index);
-        
+        var data = block.GetResultData();
+
         // Set unclickable and flip
         block.SetNonInteractive();
         block.PlayFlipShowAnimation().Forget();

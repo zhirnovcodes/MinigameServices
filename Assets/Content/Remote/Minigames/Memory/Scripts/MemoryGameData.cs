@@ -4,6 +4,7 @@ public struct MemoryGameRewardData
     public int Cash;
     public int Diamonds;
     public CharacterCardsData Cards;
+    public Icons Icon;
 }
 
 [System.Serializable]
@@ -22,7 +23,6 @@ public struct MemoryGameResultData
     public bool IsTimeout;
     public MemoryGameRewardData Reward;
     public MemoryGamePenaltyData Penalty;
-    public Icons Icon;
 }
 
 
