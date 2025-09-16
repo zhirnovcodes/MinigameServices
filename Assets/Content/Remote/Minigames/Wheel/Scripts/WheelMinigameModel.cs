@@ -150,6 +150,8 @@ public class WheelMinigameModel : MonoBehaviour, IMinigameModel
 				PlayRewardParticles(pos, result.Reward)
 			);
         }
+
+        await UniTask.WaitForSeconds(1f);
     }
 
 

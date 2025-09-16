@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: fa41197019c76ee429927dc348040ad0, type: 3}
   m_Name: PenaltiesConfig
-  m_EditorClassIdentifier: Assembly-CSharp::MemoryGamePenaltiesConfig
+  m_EditorClassIdentifier: 
   Penalties:
   - Penalty: 0
     Resource: 0

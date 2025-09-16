@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa41197019c76ee429927dc348040ad0, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d20ea10891d6ad4ebc0f52f475d07f8, type: 3}
   m_Name: RewardsConfig
   m_EditorClassIdentifier: 
   Rewards:
@@ -31,9 +31,3 @@ MonoBehaviour:
       ID: 0
       Count: 1
     Icon: 5
-  - Cash: 0
-    Diamonds: 0
-    Cards:
-      ID: 1
-      Count: 1
-    Icon: 6

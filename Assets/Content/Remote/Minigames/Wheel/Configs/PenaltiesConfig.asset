@@ -9,35 +9,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: a79e987d99320a5469a23dbcf6cf293f, type: 3}
   m_Name: PenaltiesConfig
-  m_EditorClassIdentifier: Assembly-CSharp::WheelGamePenaltiesConfig
+  m_EditorClassIdentifier: 
   Penalties:
   - Penalty: 0
-    Resource: 1
+    Resource: 0
     Amount: 0
     Icon: 0
   - Penalty: 1
     Resource: 0
     Amount: 0
     Icon: 3
+  - Penalty: 3
+    Resource: 0
+    Amount: 0
+    Icon: 3
+  - Penalty: 2
+    Resource: 0
+    Amount: 1
+    Icon: 3
   - Penalty: 1
     Resource: 1
-    Amount: 0
+    Amount: 10
     Icon: 4
-  - Penalty: 2
+  - Penalty: 3
     Resource: 1
     Amount: 10
     Icon: 4
   - Penalty: 2
-    Resource: 0
-    Amount: 5
-    Icon: 3
-  - Penalty: 3
-    Resource: 0
-    Amount: 5
-    Icon: 3
-  - Penalty: 3
     Resource: 1
-    Amount: 5
+    Amount: 10
     Icon: 4
